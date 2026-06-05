@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -36,17 +37,8 @@
       overflow-x: hidden;
     }
 
-    /* ── LANG ── */
-    .top-lang { display:flex; align-items:center; gap:6px; }
-    .top-lang-btn {
-      background:none; border:none; cursor:pointer;
-      font-size:.7rem; letter-spacing:.1em; color:var(--muted);
-      font-family:var(--font); padding:3px 2px;
-      transition:color var(--ease);
-    }
-    .top-lang-btn.active { color:var(--accent); }
-    .top-lang-btn:hover  { color:var(--white); }
-    .top-lang-div { color:#2a2a2a; font-size:.8rem; }
+    /* ── NAV MIXOLOGY ACTIVE on mix page ── */
+    .nav-mixology.active { opacity: 1 !important; }
 
     /* ── TICKER ── */
     .ticker {
@@ -78,7 +70,7 @@
       display:flex; justify-content:center; gap:4px;
       padding:20px 24px;
       background:var(--bg);
-      position:sticky; top:63px; z-index:40;
+      position:sticky; top:68px; z-index:40;
     }
     .mix-tab {
       padding:9px 28px; border-radius:30px;
@@ -102,22 +94,7 @@
       background-size:180px;
     }
 
-    /* ── HEADER ── */
-    .top-bar {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 40px;
-      border-bottom:1px solid var(--border);
-      position:sticky; top:0; z-index:50;
-      background:rgba(8,8,8,0.9); backdrop-filter:blur(16px);
-    }
-    .top-logo { height:26px; width:auto; opacity:.85; }
-    .top-back {
-      font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
-      color:var(--muted); text-decoration:none; border:1px solid var(--border);
-      padding:7px 16px; border-radius:var(--r);
-      transition:color var(--ease), border-color var(--ease);
-    }
-    .top-back:hover { color:var(--white); border-color:#444; }
+    /* ── mix-tabs position adjusted for main header height ── */
 
     /* ── HERO ── */
     .page-hero {
@@ -565,19 +542,44 @@
 </head>
 <body>
 
-<!-- TOP BAR -->
-<header class="top-bar">
-  <a href="index.html">
-    <img src="images/logo.svg" alt="RozaRed" class="top-logo" />
-  </a>
-  <div class="top-lang">
-    <button class="top-lang-btn active" data-lang="en">EN</button>
-    <span class="top-lang-div">|</span>
-    <button class="top-lang-btn" data-lang="zh">中文</button>
+<!-- HEADER -->
+<header id="header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo-link">
+      <img src="images/logo.svg" alt="RozaRed" class="logo-img" />
+    </a>
+    <nav class="nav">
+      <a href="index.html#home"    data-en="Home"      data-zh="首页">Home</a>
+      <a href="index.html#about"   data-en="About"     data-zh="关于我们">About</a>
+      <a href="index.html#catalog" data-en="Catalog"   data-zh="产品目录">Catalog</a>
+      <a href="index.html#contact" data-en="Contact"   data-zh="联系我们">Contact</a>
+      <a href="index.html#media"   data-en="Media"     data-zh="媒体">Media</a>
+      <a href="mix.html"           data-en="Mixology"  data-zh="调香" class="nav-mixology active">Mixology</a>
+    </nav>
+    <a href="weixin://dl/chat?username=d_mashkov" class="btn-contact-header" data-en="Contact Us" data-zh="联系我们">Contact Us</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <span class="lang-divider">|</span>
+      <button class="lang-btn" data-lang="zh">中文</button>
+    </div>
+    <button class="burger" id="burger" aria-label="menu">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
   </div>
-  <a href="index.html" class="top-back"
-     data-en="← Back to site" data-zh="← 返回网站">← Back to site</a>
 </header>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html#home"    data-en="Home"    data-zh="首页">Home</a>
+  <a href="index.html#about"   data-en="About"   data-zh="关于我们">About</a>
+  <a href="index.html#catalog" data-en="Catalog" data-zh="产品目录">Catalog</a>
+  <a href="index.html#contact" data-en="Contact" data-zh="联系我们">Contact</a>
+  <a href="index.html#media"   data-en="Media"   data-zh="媒体">Media</a>
+  <a href="mix.html"           data-en="Mixology" data-zh="调香">Mixology</a>
+  <a href="weixin://dl/chat?username=d_mashkov" class="btn-contact-header mobile-contact-btn" data-en="Contact Us" data-zh="联系我们">Contact Us</a>
+</div>
 
 <!-- HERO -->
 <section class="page-hero">
@@ -1464,7 +1466,7 @@ function setLanguage(lang) {
   });
 
   // Active button state
-  document.querySelectorAll('.top-lang-btn').forEach(b => {
+  document.querySelectorAll('.lang-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
@@ -1488,9 +1490,34 @@ function setLanguage(lang) {
   updateAll();
 }
 
-document.querySelectorAll('.top-lang-btn').forEach(b => {
+// Wire lang buttons (main header)
+document.querySelectorAll('.lang-btn').forEach(b => {
   b.addEventListener('click', () => setLanguage(b.dataset.lang));
 });
+
+// Header scroll
+var headerEl = document.getElementById('header');
+if (headerEl) {
+  window.addEventListener('scroll', function() {
+    headerEl.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+}
+
+// Burger
+var burgerEl    = document.getElementById('burger');
+var mobileNavEl = document.getElementById('mobileNav');
+if (burgerEl && mobileNavEl) {
+  burgerEl.addEventListener('click', function() {
+    burgerEl.classList.toggle('open');
+    mobileNavEl.classList.toggle('open');
+  });
+  mobileNavEl.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      burgerEl.classList.remove('open');
+      mobileNavEl.classList.remove('open');
+    });
+  });
+}
 
 /* ═══════════════════════════════════════════
    INIT
