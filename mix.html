@@ -816,66 +816,82 @@ function drawDonut() {
   const S  = canvas.width / dpr;
   const CX = S / 2, CY = S / 2;
   const OR = S * 0.44;
-  const IR = S * 0.30;
+  const IR = S * 0.335; // тоньше кольцо
 
   ctx.clearRect(0, 0, S, S);
 
-  // ── Background ring
+  // ── Тёмная дорожка
   ctx.beginPath();
   ctx.arc(CX, CY, OR, 0, Math.PI * 2);
-  ctx.fillStyle = '#121212';
+  ctx.fillStyle = '#0d0d0d';
   ctx.fill();
+  // Граница трека
+  ctx.beginPath();
+  ctx.arc(CX, CY, OR, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 0.8;
+  ctx.stroke();
 
-  // ── Track marks (subtle tick lines)
-  for (let i = 0; i < 20; i++) {
-    const a = (i / 20) * Math.PI * 2 - Math.PI / 2;
-    const x1 = CX + (OR - 4) * Math.cos(a);
-    const y1 = CY + (OR - 4) * Math.sin(a);
-    const x2 = CX + OR * Math.cos(a);
-    const y2 = CY + OR * Math.sin(a);
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.strokeStyle = '#1a1a1a';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  }
-
-  // ── Flavor segments
+  // ── Сегменты вкусов с glow
   let angle = -Math.PI / 2;
   FLAVORS.forEach(f => {
     const pct = drawn[f.id] || 0;
     if (pct < 0.05) return;
     const sweep = (pct / 100) * Math.PI * 2;
 
+    // Glow
+    ctx.save();
+    ctx.shadowColor = f.color;
+    ctx.shadowBlur  = 18;
+
     ctx.beginPath();
     ctx.arc(CX, CY, OR, angle, angle + sweep);
     ctx.arc(CX, CY, IR, angle + sweep, angle, true);
     ctx.closePath();
 
-    // Gradient for each segment
-    const midA = angle + sweep / 2;
-    const gx1 = CX + (OR * .6) * Math.cos(midA);
-    const gy1 = CY + (OR * .6) * Math.sin(midA);
-    const gx2 = CX + OR * Math.cos(midA);
-    const gy2 = CY + OR * Math.sin(midA);
-    const grad = ctx.createLinearGradient(gx1, gy1, gx2, gy2);
-    grad.addColorStop(0, f.color + 'dd');
-    grad.addColorStop(1, f.color);
-    ctx.fillStyle = grad;
+    // Радиальный градиент для глянца
+    const rg = ctx.createRadialGradient(CX, CY, IR, CX, CY, OR);
+    rg.addColorStop(0,    f.color + '88');
+    rg.addColorStop(0.35, f.color + 'dd');
+    rg.addColorStop(1,    f.color);
+    ctx.fillStyle = rg;
     ctx.fill();
+    ctx.restore();
 
-    // Thin gap between segments
+    // Зазор между сегментами
+    ctx.beginPath();
+    ctx.arc(CX, CY, OR, angle, angle + sweep);
+    ctx.arc(CX, CY, IR, angle + sweep, angle, true);
+    ctx.closePath();
     ctx.strokeStyle = '#080808';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.2;
     ctx.stroke();
 
     angle += sweep;
   });
 
-  // ── Hole cover
+  // ── Глянцевый блик (верхняя часть)
+  const total = getTotal();
+  if (total > 2) {
+    ctx.save();
+    const hSweep = Math.PI * 0.7;
+    const hAngle = -Math.PI / 2;
+    ctx.beginPath();
+    ctx.arc(CX, CY, OR - 0.5, hAngle, hAngle + hSweep);
+    ctx.arc(CX, CY, OR - (OR - IR) * 0.42, hAngle + hSweep, hAngle, true);
+    ctx.closePath();
+    const hg = ctx.createLinearGradient(CX, CY - OR, CX, CY - IR);
+    hg.addColorStop(0,   'rgba(255,255,255,0.18)');
+    hg.addColorStop(0.55,'rgba(255,255,255,0.05)');
+    hg.addColorStop(1,   'rgba(255,255,255,0)');
+    ctx.fillStyle = hg;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Отверстие
   ctx.beginPath();
-  ctx.arc(CX, CY, IR - 1, 0, Math.PI * 2);
+  ctx.arc(CX, CY, IR - 0.5, 0, Math.PI * 2);
   ctx.fillStyle = '#080808';
   ctx.fill();
 
@@ -1255,7 +1271,6 @@ const PICKS = [
 function getFlavor(id) { return FLAVORS.find(f => f.id === id); }
 
 function drawPickDonut(canvas, recipe, progress) {
-  // progress: 0..1 (animation fill)
   const p    = progress === undefined ? 1 : progress;
   const dpr2 = Math.min(window.devicePixelRatio || 1, 2);
   const SIZE = 140;
@@ -1264,23 +1279,25 @@ function drawPickDonut(canvas, recipe, progress) {
     canvas.height = SIZE * dpr2;
     canvas.style.width  = SIZE + 'px';
     canvas.style.height = SIZE + 'px';
-    const c0 = canvas.getContext('2d');
-    c0.scale(dpr2, dpr2);
+    canvas.getContext('2d').scale(dpr2, dpr2);
   }
   const c  = canvas.getContext('2d');
   const CX = SIZE / 2, CY = SIZE / 2;
   const OR = SIZE * 0.44;
-  const IR = SIZE * 0.28;
+  const IR = SIZE * 0.335; // тоньше: было 0.28
 
   c.clearRect(0, 0, SIZE, SIZE);
 
-  // Background ring
+  // Тёмная дорожка
   c.beginPath(); c.arc(CX, CY, OR, 0, Math.PI*2);
-  c.fillStyle = '#141414'; c.fill();
+  c.fillStyle = '#0d0d0d'; c.fill();
+  // Тонкая граница трека
+  c.beginPath(); c.arc(CX, CY, OR, 0, Math.PI*2);
+  c.strokeStyle = 'rgba(255,255,255,0.05)'; c.lineWidth = 0.8; c.stroke();
 
-  // Segments (animated by progress)
+  // Сегменты с glow
   let angle = -Math.PI / 2;
-  const totalFill = Math.PI * 2 * p; // how much of the full circle to fill
+  const totalFill = Math.PI * 2 * p;
   let filled = 0;
 
   recipe.forEach(({ id, pct }) => {
@@ -1290,33 +1307,63 @@ function drawPickDonut(canvas, recipe, progress) {
     const sweep = Math.min(fullSweep, Math.max(0, totalFill - filled));
     if (sweep <= 0) { filled += fullSweep; return; }
 
+    // Glow под сегментом
+    c.save();
+    c.shadowColor = f.color;
+    c.shadowBlur  = 14;
+
     c.beginPath();
     c.arc(CX, CY, OR, angle, angle + sweep);
     c.arc(CX, CY, IR, angle + sweep, angle, true);
     c.closePath();
-    const mid = angle + sweep / 2;
-    const gx1 = CX + IR * Math.cos(mid), gy1 = CY + IR * Math.sin(mid);
-    const gx2 = CX + OR * Math.cos(mid), gy2 = CY + OR * Math.sin(mid);
-    const grad = c.createLinearGradient(gx1, gy1, gx2, gy2);
-    grad.addColorStop(0, f.color + 'bb');
-    grad.addColorStop(1, f.color);
-    c.fillStyle = grad;
+
+    // Радиальный градиент: глянцевый эффект изнутри наружу
+    const rg = c.createRadialGradient(CX, CY, IR, CX, CY, OR);
+    rg.addColorStop(0,   f.color + '88');
+    rg.addColorStop(0.35, f.color + 'dd');
+    rg.addColorStop(1,   f.color);
+    c.fillStyle = rg;
     c.fill();
-    c.strokeStyle = '#080808'; c.lineWidth = 1.5; c.stroke();
+    c.restore();
+
+    // Тонкий зазор (без glow)
+    c.beginPath();
+    c.arc(CX, CY, OR, angle, angle + sweep);
+    c.arc(CX, CY, IR, angle + sweep, angle, true);
+    c.closePath();
+    c.strokeStyle = '#080808'; c.lineWidth = 1; c.stroke();
 
     angle += sweep;
     filled += fullSweep;
   });
 
-  // Hole
-  c.beginPath(); c.arc(CX, CY, IR - 1, 0, Math.PI*2);
+  // Глянцевый блик сверху (белый crescenti)
+  if (p > 0.05) {
+    c.save();
+    const hSweep = Math.PI * 0.65;
+    const hAngle = -Math.PI / 2;
+    c.beginPath();
+    c.arc(CX, CY, OR - 0.5, hAngle, hAngle + hSweep);
+    c.arc(CX, CY, OR - (OR - IR) * 0.45, hAngle + hSweep, hAngle, true);
+    c.closePath();
+    const hg = c.createLinearGradient(CX, CY - OR, CX, CY - IR);
+    hg.addColorStop(0,   'rgba(255,255,255,0.22)');
+    hg.addColorStop(0.6, 'rgba(255,255,255,0.06)');
+    hg.addColorStop(1,   'rgba(255,255,255,0)');
+    c.fillStyle = hg;
+    c.fill();
+    c.restore();
+  }
+
+  // Отверстие
+  c.beginPath(); c.arc(CX, CY, IR - 0.5, 0, Math.PI*2);
   c.fillStyle = '#080808'; c.fill();
 
-  // Center text
+  // Текст по центру
   c.textAlign = 'center'; c.textBaseline = 'middle';
   const pctShown = Math.round(p * 100);
   c.font = '500 ' + Math.round(SIZE * 0.13) + 'px DM Sans';
-  c.fillStyle = p >= 1 ? '#f0ede8' : '#4a4a4a';
+  c.fillStyle = p >= 1 ? '#f0ede8' : '#3a3a3a';
   c.fillText(pctShown + '%', CX, CY);
 }
 
