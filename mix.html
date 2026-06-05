@@ -42,9 +42,10 @@
     .ticker {
       overflow:hidden; white-space:nowrap;
       background:rgba(255,255,255,.03);
-      border-top:1px solid rgba(255,255,255,.04);
-      margin-top:28px;
-      padding:10px 0; user-select:none; border-radius:4px;
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.04);
+      margin-top:0;
+      padding:10px 0; user-select:none;
     }
     .ticker-track {
       display:inline-flex; gap:0;
@@ -65,24 +66,26 @@
 
     /* ── TABS ── */
     .mix-tabs {
-      display:flex; justify-content:center; gap:4px;
-      padding:20px 24px;
+      display:flex; justify-content:center; gap:8px;
+      padding:16px 24px;
       background:var(--bg);
+      border-bottom:1px solid var(--border);
       position:sticky; top:68px; z-index:40;
     }
     .mix-tab {
-      padding:9px 28px; border-radius:30px;
-      font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+      padding:9px 32px; border-radius:var(--r);
+      font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
       font-family:var(--font); font-weight:400; cursor:pointer;
-      border:1px solid var(--border); color:var(--muted);
+      border:1px solid #282828; color:var(--muted);
       background:transparent;
       transition:background .25s, color .25s, border-color .25s;
       text-decoration:none; display:inline-block;
     }
-    .mix-tab.active, .mix-tab:hover {
-      background:var(--white); color:#111; border-color:var(--white);
+    .mix-tab.active {
+      border-color:var(--accent); color:var(--accent);
     }
-    .mix-tab.active { font-weight:500; }
+    .mix-tab:not(.active):hover { color:var(--white); border-color:#484848; }
+
 
     /* ── GRAIN ── */
     body::after {
@@ -96,7 +99,7 @@
 
     /* ── HERO ── */
     .page-hero {
-      text-align:center; padding:64px 24px 48px;
+      text-align:center; padding:56px 24px 0;
       position:relative; overflow:hidden;
     }
     .page-hero::before {
@@ -114,20 +117,20 @@
       margin-bottom:16px; line-height:1.1;
     }
     .page-hero .sub {
-      font-size:.9rem; color:var(--muted); max-width:520px;
-      margin:0 auto 24px; line-height:1.75; font-weight:300;
+      font-size:.88rem; color:var(--muted); max-width:480px;
+      margin:0 auto 20px; line-height:1.7; font-weight:300;
     }
     .prize-badge {
       display:inline-flex; align-items:center; gap:10px;
-      background:rgba(181,48,42,.08); border:1px solid rgba(181,48,42,.25);
-      padding:10px 22px; border-radius:40px;
-      font-size:.72rem; letter-spacing:.08em; color:#c0785a;
+      background:rgba(181,48,42,.07); border:1px solid rgba(181,48,42,.2);
+      padding:9px 20px; border-radius:40px; margin-bottom:28px;
+      font-size:.68rem; letter-spacing:.08em; color:#c0785a;
     }
-    .prize-badge .icon { font-size:1rem; }
+    .prize-badge .icon { font-size:.95rem; }
 
     /* ── CURATOR PICKS ── */
     .curator-section {
-      padding: 72px 40px 64px;
+      padding: 52px 40px 56px;
       border-bottom: 1px solid var(--border);
       position: relative;
     }
@@ -137,7 +140,7 @@
       pointer-events:none;
     }
     .curator-header {
-      text-align:center; margin-bottom:52px;
+      text-align:center; margin-bottom:36px;
     }
     .curator-header .label {
       font-size:.58rem; letter-spacing:.32em; text-transform:uppercase;
@@ -593,11 +596,12 @@
     <span class="icon">👕</span>
     <span data-en="Best mixes win merch &amp; get published" data-zh="最佳配方赢得周边并公开发布">Best mixes win merch &amp; get published</span>
   </div>
-  <!-- TICKER inside hero -->
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker-track" id="tickerTrack"></div>
-  </div>
 </section>
+
+<!-- TICKER (between hero and tabs) -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
 
 <!-- TABS -->
 <nav class="mix-tabs">
