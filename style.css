@@ -77,7 +77,10 @@ img { display: block; max-width: 100%; }
 }
 
 .header-inner {
-  display: flex; align-items: center; height: 68px; gap: 40px;
+  display: flex; align-items: center; height: 68px; gap: 32px;
+}
+.header-actions {
+  display: flex; align-items: center; gap: 10px;
 }
 
 .logo-link { display: flex; align-items: center; }
@@ -564,41 +567,45 @@ img { display: block; max-width: 100%; }
 .format-switcher {
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: fit-content;
-  margin: 0 auto 56px;
-  gap: 12px;
+  align-items: flex-end;
+  width: 100%;
+  margin: 0 auto 48px;
+  gap: 0;
+  border-bottom: 1px solid var(--border-soft);
 }
 .format-tab {
-  padding: 14px 36px;
+  padding: 0 36px 14px;
   background: transparent;
-  border: 1px solid #282828;
-  border-radius: var(--radius);
+  border: none;
+  border-radius: 0;
   color: var(--muted);
   font-size: 0.72rem;
   font-family: var(--font);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
-  transition: background var(--ease), color var(--ease), border-color var(--ease);
+  position: relative;
+  transition: color var(--ease);
   font-weight: 400;
+  white-space: nowrap;
 }
-.format-tab.active {
-  border-color: var(--accent); color: var(--accent);
+.format-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 36px; right: 36px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--ease);
 }
-.format-tab:not(.active):hover { color: var(--white); border-color: #484848; }
-.format-tab--mixes {
-  border-color: rgba(181,48,42,.4) !important;
-  color: var(--accent) !important;
-}
-.format-tab--mixes:hover {
-  background: var(--accent) !important;
-  color: var(--white) !important;
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 24px rgba(181,48,42,.25);
-}
+.format-tab.active { color: var(--white); }
+.format-tab.active::after { transform: scaleX(1); }
+.format-tab:not(.active):hover { color: var(--white); }
+.format-tab--mixes { color: var(--accent); }
+.format-tab--mixes:hover { color: var(--accent); opacity: .75; }
 
 .catalog-grid {
   transition: opacity 0.4s ease;

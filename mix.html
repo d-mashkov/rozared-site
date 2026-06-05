@@ -69,7 +69,6 @@
       display:flex; justify-content:center; gap:8px;
       padding:16px 24px;
       background:var(--bg);
-      border-bottom:1px solid var(--border);
       position:sticky; top:68px; z-index:40;
     }
     .mix-tab {
@@ -99,34 +98,41 @@
 
     /* ── HERO ── */
     .page-hero {
-      text-align:center; padding:56px 24px 0;
+      text-align:center; padding:80px 24px 0;
       position:relative; overflow:hidden;
     }
     .page-hero::before {
       content:''; position:absolute; inset:0;
-      background:radial-gradient(ellipse 70% 80% at 50% 0%, rgba(181,48,42,.06) 0%, transparent 70%);
+      background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(181,48,42,.09) 0%, transparent 65%);
       pointer-events:none;
     }
     .page-hero .label {
-      font-size:.6rem; letter-spacing:.32em; text-transform:uppercase;
-      color:var(--accent); margin-bottom:16px; display:block;
+      font-size:.6rem; letter-spacing:.36em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:20px; display:block;
+      opacity:.8;
     }
     .page-hero h1 {
-      font-size:clamp(1.8rem,4vw,3rem); font-weight:300;
+      font-size:clamp(2.2rem,5vw,3.8rem); font-weight:300;
       color:var(--white); letter-spacing:.06em; text-transform:uppercase;
-      margin-bottom:16px; line-height:1.1;
+      margin-bottom:20px; line-height:1.05;
     }
     .page-hero .sub {
-      font-size:.88rem; color:var(--muted); max-width:480px;
-      margin:0 auto 20px; line-height:1.7; font-weight:300;
+      font-size:.9rem; color:#666; max-width:500px;
+      margin:0 auto 32px; line-height:1.75; font-weight:300;
     }
     .prize-badge {
-      display:inline-flex; align-items:center; gap:10px;
-      background:rgba(181,48,42,.07); border:1px solid rgba(181,48,42,.2);
-      padding:9px 20px; border-radius:40px; margin-bottom:28px;
-      font-size:.68rem; letter-spacing:.08em; color:#c0785a;
+      display:inline-flex; align-items:center; gap:12px;
+      background:rgba(181,48,42,.08); border:1px solid rgba(181,48,42,.28);
+      padding:12px 28px; border-radius:50px; margin-bottom:36px;
+      font-size:.72rem; letter-spacing:.1em; color:#c57a5a;
+      box-shadow: 0 0 32px rgba(181,48,42,.12), 0 0 80px rgba(181,48,42,.06);
+      animation: badgePulse 3.5s ease-in-out infinite;
     }
-    .prize-badge .icon { font-size:.95rem; }
+    .prize-badge .icon { font-size:1.1rem; }
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 24px rgba(181,48,42,.10), 0 0 60px rgba(181,48,42,.04); }
+      50%      { box-shadow: 0 0 40px rgba(181,48,42,.22), 0 0 100px rgba(181,48,42,.10); }
+    }
 
     /* ── CURATOR PICKS ── */
     .curator-section {
@@ -556,8 +562,10 @@
       <a href="index.html#contact" data-en="Contact" data-zh="联系我们">Contact</a>
       <a href="index.html#media"   data-en="Media"   data-zh="媒体">Media</a>
     </nav>
-    <a href="mix.html" class="btn-mixology-header active-page" data-en="Mixology" data-zh="调香">Mixology</a>
-    <a href="weixin://dl/chat?username=d_mashkov" class="btn-contact-header" data-en="Contact Us" data-zh="联系我们">Contact Us</a>
+    <div class="header-actions">
+      <a href="mix.html" class="btn-mixology-header active-page" data-en="Mixology" data-zh="调香">Mixology</a>
+      <a href="weixin://dl/chat?username=d_mashkov" class="btn-contact-header" data-en="Contact Us" data-zh="联系我们">Contact Us</a>
+    </div>
     <div class="lang-switch">
       <button class="lang-btn active" data-lang="en">EN</button>
       <span class="lang-divider">|</span>
