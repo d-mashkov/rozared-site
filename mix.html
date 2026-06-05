@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Your Mix — RozaRed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #080808;
+      --bg2:    #0d0d0d;
+      --bg3:    #111111;
+      --bg4:    #161616;
+      --border: #1e1e1e;
+      --text:   #c0c0c0;
+      --muted:  #555;
+      --accent: #b5302a;
+      --white:  #f0ede8;
+      --font:   'DM Sans', sans-serif;
+      --r:      8px;
+      --ease:   0.3s cubic-bezier(0.25,0.1,0.25,1);
+    }
+
+    html { font-size: 16px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── GRAIN ── */
+    body::after {
+      content:''; position:fixed; inset:0; z-index:9999; pointer-events:none;
+      opacity:0.025;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:180px;
+    }
+
+    /* ── HEADER ── */
+    .top-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 40px;
+      border-bottom:1px solid var(--border);
+      position:sticky; top:0; z-index:50;
+      background:rgba(8,8,8,0.9); backdrop-filter:blur(16px);
+    }
+    .top-logo { height:26px; width:auto; opacity:.85; }
+    .top-back {
+      font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--muted); text-decoration:none; border:1px solid var(--border);
+      padding:7px 16px; border-radius:var(--r);
+      transition:color var(--ease), border-color var(--ease);
+    }
+    .top-back:hover { color:var(--white); border-color:#444; }
+
+    /* ── HERO ── */
+    .page-hero {
+      text-align:center; padding:64px 24px 48px;
+      border-bottom:1px solid var(--border);
+      position:relative; overflow:hidden;
+    }
+    .page-hero::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse 70% 80% at 50% 0%, rgba(181,48,42,.06) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .page-hero .label {
+      font-size:.6rem; letter-spacing:.32em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:16px; display:block;
+    }
+    .page-hero h1 {
+      font-size:clamp(1.8rem,4vw,3rem); font-weight:300;
+      color:var(--white); letter-spacing:.06em; text-transform:uppercase;
+      margin-bottom:16px; line-height:1.1;
+    }
+    .page-hero .sub {
+      font-size:.9rem; color:var(--muted); max-width:520px;
+      margin:0 auto 24px; line-height:1.75; font-weight:300;
+    }
+    .prize-badge {
+      display:inline-flex; align-items:center; gap:10px;
+      background:rgba(181,48,42,.08); border:1px solid rgba(181,48,42,.25);
+      padding:10px 22px; border-radius:40px;
+      font-size:.72rem; letter-spacing:.08em; color:#c0785a;
+    }
+    .prize-badge .icon { font-size:1rem; }
+
+    /* ── MAIN LAYOUT ── */
+    .mix-layout {
+      display:grid; grid-template-columns:380px 1fr;
+      gap:0; max-width:1200px; margin:0 auto;
+      align-items:start;
+    }
+
+    /* ── LEFT: BOWL ── */
+    .bowl-panel {
+      position:sticky; top:68px;
+      padding:48px 40px 40px;
+      border-right:1px solid var(--border);
+    }
+    .canvas-wrap {
+      position:relative; width:280px; height:280px;
+      margin:0 auto 32px;
+    }
+    #mixCanvas {
+      width:280px; height:280px;
+      border-radius:50%;
+    }
+    /* pulse когда 100% */
+    .canvas-wrap.complete #mixCanvas {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { filter: drop-shadow(0 0 0px rgba(181,48,42,0)); }
+      50%      { filter: drop-shadow(0 0 28px rgba(181,48,42,0.4)); }
+    }
+
+    /* Rating */
+    .mix-rating {
+      text-align:center; margin-bottom:24px;
+      min-height:40px; display:flex; flex-direction:column;
+      align-items:center; gap:4px;
+    }
+    .rating-label {
+      font-size:.55rem; letter-spacing:.28em; text-transform:uppercase;
+      color:var(--muted); display:block;
+    }
+    .rating-value {
+      font-size:1rem; font-weight:500; color:var(--white);
+      transition:color .4s ease;
+      letter-spacing:.04em;
+    }
+
+    /* Progress bar */
+    .progress-wrap { margin-bottom:28px; }
+    .progress-meta {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:8px;
+    }
+    .progress-meta span { font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+    .progress-meta .remain { color:var(--accent); font-weight:500; }
+    .progress-bar {
+      height:3px; background:var(--bg4); border-radius:2px;
+      overflow:hidden; position:relative;
+    }
+    .progress-fill {
+      height:100%; border-radius:2px;
+      background: linear-gradient(90deg, var(--accent), #e05040);
+      transition:width .4s cubic-bezier(0.25,0.1,0.25,1);
+      width:0%;
+    }
+
+    /* Legend */
+    .mix-legend {
+      display:flex; flex-direction:column; gap:6px;
+      max-height:200px; overflow-y:auto;
+    }
+    .mix-legend::-webkit-scrollbar { width:2px; }
+    .mix-legend::-webkit-scrollbar-thumb { background:#2a2a2a; }
+    .legend-item {
+      display:flex; align-items:center; gap:10px;
+      font-size:.75rem; color:var(--text);
+      opacity:0; transform:translateX(-8px);
+      transition:opacity .4s ease, transform .4s ease;
+    }
+    .legend-item.visible { opacity:1; transform:translateX(0); }
+    .legend-dot {
+      width:8px; height:8px; border-radius:50%; flex-shrink:0;
+    }
+    .legend-name { flex:1; font-weight:300; }
+    .legend-pct  { font-weight:500; color:var(--white); }
+
+    /* ── RIGHT: FLAVORS ── */
+    .flavors-panel { padding:48px 40px 48px; }
+
+    .flavors-header {
+      margin-bottom:28px;
+      display:flex; align-items:baseline; justify-content:space-between;
+    }
+    .flavors-header h2 {
+      font-size:.7rem; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--muted); font-weight:400;
+    }
+    .total-badge {
+      font-size:.7rem; letter-spacing:.1em;
+      color:var(--muted); font-weight:400;
+    }
+    .total-badge .total-num {
+      font-size:1rem; font-weight:600; color:var(--white);
+      font-variant-numeric:tabular-nums;
+      transition:color .3s;
+    }
+    .total-badge.over .total-num { color:#e05050; }
+    .total-badge.done .total-num { color:#4caf7d; }
+
+    /* Flavor rows */
+    .flavor-list { display:flex; flex-direction:column; gap:6px; }
+
+    .flavor-row {
+      display:flex; align-items:center; gap:12px;
+      padding:14px 16px;
+      background:var(--bg3); border:1px solid transparent;
+      border-radius:var(--r);
+      transition:background .25s, border-color .25s, transform .2s;
+      cursor:default;
+    }
+    .flavor-row.active {
+      background:var(--bg4);
+      border-color:var(--border);
+    }
+    .flavor-row.active .frow-name { color:var(--white); }
+
+    .frow-dot {
+      width:10px; height:10px; border-radius:50%; flex-shrink:0;
+      transition:transform .3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .flavor-row.active .frow-dot { transform:scale(1.35); }
+
+    .frow-name {
+      flex:1; font-size:.88rem; font-weight:300;
+      color:var(--muted); transition:color .25s;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    .frow-controls {
+      display:flex; align-items:center; gap:6px;
+    }
+    .frow-btn {
+      width:28px; height:28px; border-radius:6px;
+      background:var(--bg2); border:1px solid var(--border);
+      color:var(--muted); font-size:1rem; line-height:1;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:background .2s, color .2s, border-color .2s;
+      font-family:var(--font); user-select:none;
+    }
+    .frow-btn:hover { background:var(--bg4); color:var(--white); border-color:#444; }
+    .frow-btn:active { transform:scale(.93); }
+    .frow-btn:disabled { opacity:.25; cursor:not-allowed; }
+    .frow-btn.minus { font-size:.9rem; }
+
+    .frow-input-wrap { position:relative; }
+    .frow-input {
+      width:52px; text-align:center;
+      background:var(--bg2); border:1px solid var(--border);
+      border-radius:6px; color:var(--white);
+      font-size:.88rem; font-family:var(--font); font-weight:500;
+      padding:4px 4px 4px 4px;
+      outline:none; -moz-appearance:textfield;
+    }
+    .frow-input::-webkit-inner-spin-button,
+    .frow-input::-webkit-outer-spin-button { -webkit-appearance:none; }
+    .frow-input:focus { border-color:rgba(181,48,42,.5); }
+    .frow-pct {
+      position:absolute; right:6px; top:50%;
+      transform:translateY(-50%);
+      font-size:.65rem; color:var(--muted); pointer-events:none;
+    }
+
+    /* Float animation on change */
+    .float-tip {
+      position:fixed; font-size:.72rem; font-weight:600;
+      pointer-events:none; z-index:1000;
+      animation:floatUp .7s ease forwards;
+      color:var(--white);
+    }
+    @keyframes floatUp {
+      0%   { opacity:1; transform:translateY(0); }
+      100% { opacity:0; transform:translateY(-28px); }
+    }
+
+    /* ── SUBMIT SECTION ── */
+    .submit-section {
+      max-width:1200px; margin:0 auto;
+      padding:0 40px 80px;
+      border-top:1px solid var(--border);
+    }
+    .submit-inner {
+      max-width:640px; margin:0 auto;
+      padding-top:60px;
+      opacity:0; transform:translateY(24px);
+      transition:opacity .8s ease, transform .8s ease;
+      pointer-events:none;
+    }
+    .submit-inner.visible { opacity:1; transform:translateY(0); pointer-events:all; }
+
+    .submit-hero {
+      text-align:center; margin-bottom:48px;
+    }
+    .submit-hero .crown { font-size:2.4rem; display:block; margin-bottom:16px; }
+    .submit-hero h2 {
+      font-size:1.5rem; font-weight:300; color:var(--white);
+      letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px;
+    }
+    .submit-hero p {
+      font-size:.85rem; color:var(--muted); line-height:1.75; font-weight:300;
+    }
+
+    .mix-summary {
+      background:var(--bg3); border:1px solid var(--border);
+      border-radius:var(--r); padding:20px 24px;
+      margin-bottom:32px; display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .mix-chip {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:5px 12px; border-radius:20px;
+      font-size:.72rem; font-weight:400; color:var(--white);
+      background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+    }
+    .mix-chip-dot { width:6px; height:6px; border-radius:50%; }
+
+    .submit-form { display:flex; flex-direction:column; gap:14px; }
+    .sf-group { position:relative; }
+    .sf-group input, .sf-group textarea {
+      width:100%; background:var(--bg3); border:1px solid #1a1a1a;
+      border-radius:var(--r); color:var(--white); font-family:var(--font);
+      font-size:.88rem; font-weight:300;
+      padding:20px 16px 8px; outline:none;
+      transition:border-color var(--ease);
+      resize:none;
+    }
+    .sf-group input:focus, .sf-group textarea:focus {
+      border-color:rgba(181,48,42,.5);
+    }
+    .sf-group label {
+      position:absolute; top:14px; left:16px;
+      font-size:.8rem; color:#383838; pointer-events:none;
+      transition:all var(--ease); font-weight:300;
+    }
+    .sf-group input:focus ~ label,
+    .sf-group input:not(:placeholder-shown) ~ label,
+    .sf-group textarea:focus ~ label,
+    .sf-group textarea:not(:placeholder-shown) ~ label {
+      top:5px; font-size:.58rem; color:var(--accent);
+      letter-spacing:.12em; text-transform:uppercase;
+    }
+
+    .submit-btn {
+      margin-top:8px; padding:16px 40px;
+      background:transparent; color:var(--accent);
+      border:1px solid var(--accent); border-radius:var(--r);
+      font-family:var(--font); font-size:.75rem;
+      letter-spacing:.16em; text-transform:uppercase;
+      cursor:pointer; font-weight:400;
+      transition:background var(--ease), color var(--ease), box-shadow var(--ease);
+    }
+    .submit-btn:hover {
+      background:var(--accent); color:var(--white);
+      box-shadow:0 0 24px rgba(181,48,42,.25);
+    }
+    .submit-fine {
+      font-size:.65rem; color:var(--muted); text-align:center;
+      margin-top:12px; line-height:1.7; font-weight:300;
+    }
+    .form-success {
+      font-size:.85rem; color:#4caf7d; text-align:center;
+      padding:16px; background:rgba(76,175,113,.06);
+      border:1px solid rgba(76,175,113,.15); border-radius:var(--r);
+      display:none;
+    }
+    .form-success.show { display:block; }
+
+    /* ── RESET BTN ── */
+    .reset-btn {
+      background:none; border:1px solid var(--border);
+      border-radius:var(--r); color:var(--muted);
+      font-family:var(--font); font-size:.65rem;
+      letter-spacing:.12em; text-transform:uppercase;
+      padding:7px 16px; cursor:pointer;
+      transition:color var(--ease), border-color var(--ease);
+    }
+    .reset-btn:hover { color:var(--white); border-color:#444; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 860px) {
+      .mix-layout { grid-template-columns:1fr; }
+      .bowl-panel {
+        position:static; border-right:none;
+        border-bottom:1px solid var(--border);
+        padding:40px 24px 32px;
+        display:flex; flex-direction:column; align-items:center;
+      }
+      .canvas-wrap { width:240px; height:240px; }
+      #mixCanvas { width:240px; height:240px; }
+      .mix-legend { flex-direction:row; flex-wrap:wrap; gap:8px; max-height:none; }
+      .legend-item { width:auto; }
+      .progress-wrap, .mix-rating { width:100%; max-width:320px; }
+      .flavors-panel { padding:32px 20px 40px; }
+      .submit-section { padding:0 20px 60px; }
+      .top-bar { padding:14px 20px; }
+      .page-hero { padding:48px 20px 36px; }
+    }
+
+    @media (max-width: 480px) {
+      .canvas-wrap { width:200px; height:200px; }
+      #mixCanvas { width:200px; height:200px; }
+      .flavor-row { padding:12px 12px; gap:8px; }
+      .frow-input { width:44px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="top-bar">
+  <a href="index.html">
+    <img src="images/logo.svg" alt="RozaRed" class="top-logo" />
+  </a>
+  <a href="index.html" class="top-back">← Back to site</a>
+</header>
+
+<!-- HERO -->
+<section class="page-hero">
+  <span class="label">RozaRed Challenge</span>
+  <h1>Create Your Mix</h1>
+  <p class="sub">
+    Choose from 10 signature flavors, set your percentages, and craft a 100% original blend.
+    The most creative mixes win a <strong style="color:var(--white)">RozaRed T-Shirt</strong> and get featured on our channel.
+  </p>
+  <div class="prize-badge">
+    <span class="icon">👕</span>
+    Best mixes win merch &amp; get published
+  </div>
+</section>
+
+<!-- MAIN -->
+<main>
+  <div class="mix-layout">
+
+    <!-- LEFT: BOWL VISUALIZATION -->
+    <aside class="bowl-panel">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="mixCanvas"></canvas>
+      </div>
+
+      <div class="mix-rating">
+        <span class="rating-label">Mix Profile</span>
+        <span class="rating-value" id="ratingValue">—</span>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span>Filled</span>
+          <span class="remain" id="remainLabel">100% remaining</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="mix-legend" id="mixLegend"></div>
+    </aside>
+
+    <!-- RIGHT: FLAVOR CONTROLS -->
+    <section class="flavors-panel">
+      <div class="flavors-header">
+        <h2>Choose flavors</h2>
+        <div class="total-badge" id="totalBadge">
+          Total: <span class="total-num" id="totalNum">0</span>%
+          &nbsp;
+          <button class="reset-btn" id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <div class="flavor-list" id="flavorList"></div>
+    </section>
+
+  </div><!-- /mix-layout -->
+</main>
+
+<!-- SUBMIT -->
+<section class="submit-section">
+  <div class="submit-inner" id="submitInner">
+    <div class="submit-hero">
+      <span class="crown">🏆</span>
+      <h2>Your Mix is Ready!</h2>
+      <p>
+        Give your mix a name, leave your contact details,<br>
+        and send it to us. We'll review the best submissions.
+      </p>
+    </div>
+
+    <div class="mix-summary" id="mixSummary"></div>
+
+    <form class="submit-form" id="mixForm"
+          action="https://formsubmit.co/ajax/dmashkovjob@gmail.com" method="POST">
+
+      <input type="hidden" name="_subject" value="New RozaRed Mix Submission" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="mix_recipe" id="hiddenRecipe" />
+
+      <div class="sf-group">
+        <input type="text" name="mix_name" id="mixName" required placeholder=" " />
+        <label>Mix Name (make it creative!)</label>
+      </div>
+      <div class="sf-group">
+        <input type="text" name="author_name" required placeholder=" " />
+        <label>Your Name</label>
+      </div>
+      <div class="sf-group">
+        <input type="email" name="email" required placeholder=" " />
+        <label>Email or WeChat ID</label>
+      </div>
+      <div class="sf-group">
+        <textarea name="notes" rows="3" placeholder=" "></textarea>
+        <label>Tell us about your mix (optional)</label>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Send My Mix →</button>
+      <p class="submit-fine">
+        By submitting you agree to have your mix featured on our channel.<br>
+        We'll contact the winners within 7 days.
+      </p>
+      <div class="form-success" id="formSuccess">
+        🎉 Mix received! We'll review it and contact you soon. Good luck!
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+const FLAVORS = [
+  { id:'tieguanyin',   name:'TieGuanYin',       zh:'铁观音',     color:'#9B7240' },
+  { id:'jasmine',      name:'Jasmine',           zh:'茉莉花',     color:'#C8B090' },
+  { id:'coniferous',   name:'Coniferous Forest', zh:'松林',       color:'#3D8C60' },
+  { id:'mango',        name:'Mango',             zh:'芒果',       color:'#F5A42A' },
+  { id:'lemon-lime',   name:'Lemon Lime',        zh:'柠檬青柠',   color:'#B8D428' },
+  { id:'gum-mint',     name:'Gum Mint',          zh:'薄荷口香糖', color:'#2EC4A0' },
+  { id:'watermelon',   name:'Watermelon',        zh:'西瓜',       color:'#E84C78' },
+  { id:'northern-ice', name:'Northern Ice',      zh:'北冰',       color:'#58B4D8' },
+  { id:'milk',         name:'Milk',              zh:'纯牛奶',     color:'#D4C4A8' },
+  { id:'lychee',       name:'Lychee',            zh:'荔枝',       color:'#F07898' },
+];
+
+const RATINGS = [
+  { min:0,  max:0,  label:'Empty Bowl',     color:'#333' },
+  { min:1,  max:1,  label:'Pure',           color:'#C8B090' },
+  { min:2,  max:3,  label:'Focused Blend',  color:'#9B7240' },
+  { min:4,  max:5,  label:'Balanced Blend', color:'#3D8C60' },
+  { min:6,  max:8,  label:'Adventurous',    color:'#F5A42A' },
+  { min:9,  max:10, label:'Masterblend',    color:'#b5302a' },
+];
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+const values = {}; // { flavorId: number }
+const drawn  = {}; // animation interpolation
+FLAVORS.forEach(f => { values[f.id] = 0; drawn[f.id] = 0; });
+
+let animating = false;
+const STEP = 5;
+
+/* ═══════════════════════════════════════════
+   CANVAS SETUP
+═══════════════════════════════════════════ */
+const canvas = document.getElementById('mixCanvas');
+const ctx    = canvas.getContext('2d');
+const dpr    = Math.min(window.devicePixelRatio || 1, 2);
+
+function setupCanvas() {
+  const el = document.getElementById('canvasWrap');
+  const size = el.clientWidth || 280;
+  canvas.width  = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width  = size + 'px';
+  canvas.style.height = size + 'px';
+  ctx.scale(dpr, dpr);
+}
+setupCanvas();
+window.addEventListener('resize', () => { ctx.setTransform(1,0,0,1,0,0); setupCanvas(); drawDonut(); });
+
+/* ═══════════════════════════════════════════
+   CANVAS DRAWING
+═══════════════════════════════════════════ */
+function drawDonut() {
+  const S  = canvas.width / dpr;
+  const CX = S / 2, CY = S / 2;
+  const OR = S * 0.44;
+  const IR = S * 0.30;
+
+  ctx.clearRect(0, 0, S, S);
+
+  // ── Background ring
+  ctx.beginPath();
+  ctx.arc(CX, CY, OR, 0, Math.PI * 2);
+  ctx.fillStyle = '#121212';
+  ctx.fill();
+
+  // ── Track marks (subtle tick lines)
+  for (let i = 0; i < 20; i++) {
+    const a = (i / 20) * Math.PI * 2 - Math.PI / 2;
+    const x1 = CX + (OR - 4) * Math.cos(a);
+    const y1 = CY + (OR - 4) * Math.sin(a);
+    const x2 = CX + OR * Math.cos(a);
+    const y2 = CY + OR * Math.sin(a);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // ── Flavor segments
+  let angle = -Math.PI / 2;
+  FLAVORS.forEach(f => {
+    const pct = drawn[f.id] || 0;
+    if (pct < 0.05) return;
+    const sweep = (pct / 100) * Math.PI * 2;
+
+    ctx.beginPath();
+    ctx.arc(CX, CY, OR, angle, angle + sweep);
+    ctx.arc(CX, CY, IR, angle + sweep, angle, true);
+    ctx.closePath();
+
+    // Gradient for each segment
+    const midA = angle + sweep / 2;
+    const gx1 = CX + (OR * .6) * Math.cos(midA);
+    const gy1 = CY + (OR * .6) * Math.sin(midA);
+    const gx2 = CX + OR * Math.cos(midA);
+    const gy2 = CY + OR * Math.sin(midA);
+    const grad = ctx.createLinearGradient(gx1, gy1, gx2, gy2);
+    grad.addColorStop(0, f.color + 'dd');
+    grad.addColorStop(1, f.color);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Thin gap between segments
+    ctx.strokeStyle = '#080808';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    angle += sweep;
+  });
+
+  // ── Hole cover
+  ctx.beginPath();
+  ctx.arc(CX, CY, IR - 1, 0, Math.PI * 2);
+  ctx.fillStyle = '#080808';
+  ctx.fill();
+
+  // ── Center text
+  const total = getTotal();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (total === 0) {
+    ctx.font = '300 12px DM Sans';
+    ctx.fillStyle = '#2a2a2a';
+    ctx.fillText('Add flavors', CX, CY - 8);
+    ctx.font = '300 11px DM Sans';
+    ctx.fillStyle = '#1e1e1e';
+    ctx.fillText('to fill your bowl', CX, CY + 10);
+  } else if (total === 100) {
+    ctx.font = '600 13px DM Sans';
+    ctx.fillStyle = '#b5302a';
+    ctx.fillText('READY', CX, CY - 10);
+    ctx.font = '300 10px DM Sans';
+    ctx.fillStyle = '#555';
+    ctx.fillText('scroll down ↓', CX, CY + 9);
+  } else {
+    ctx.font = '600 ' + Math.round(S * 0.14) + 'px DM Sans';
+    ctx.fillStyle = '#f0ede8';
+    ctx.fillText(Math.round(total) + '%', CX, CY - 8);
+    ctx.font = '300 11px DM Sans';
+    ctx.fillStyle = '#3a3a3a';
+    ctx.fillText('of 100%', CX, CY + Math.round(S * 0.09));
+  }
+
+  // ── Outer ring highlight when complete
+  if (total === 100) {
+    ctx.beginPath();
+    ctx.arc(CX, CY, OR + 4, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(181,48,42,0.15)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATION
+═══════════════════════════════════════════ */
+function animateDonut() {
+  let done = true;
+  FLAVORS.forEach(f => {
+    const target = values[f.id] || 0;
+    const cur    = drawn[f.id] || 0;
+    const diff   = target - cur;
+    if (Math.abs(diff) > 0.08) {
+      drawn[f.id] = cur + diff * 0.18;
+      done = false;
+    } else {
+      drawn[f.id] = target;
+    }
+  });
+  drawDonut();
+  if (!done) requestAnimationFrame(animateDonut);
+  else animating = false;
+}
+
+function startAnim() {
+  if (!animating) { animating = true; requestAnimationFrame(animateDonut); }
+}
+
+/* ═══════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════ */
+function getTotal() {
+  return FLAVORS.reduce((s, f) => s + (values[f.id] || 0), 0);
+}
+function getActive() {
+  return FLAVORS.filter(f => (values[f.id] || 0) > 0).length;
+}
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+function getRating() {
+  const n = getActive();
+  return RATINGS.find(r => n >= r.min && n <= r.max) || RATINGS[0];
+}
+
+/* ═══════════════════════════════════════════
+   FLOAT TIP ANIMATION
+═══════════════════════════════════════════ */
+function showFloatTip(el, text, color) {
+  const rect = el.getBoundingClientRect();
+  const tip  = document.createElement('div');
+  tip.className = 'float-tip';
+  tip.textContent = text;
+  tip.style.left  = (rect.left + rect.width / 2) + 'px';
+  tip.style.top   = (rect.top - 8 + window.scrollY) + 'px';
+  tip.style.color = color;
+  document.body.appendChild(tip);
+  setTimeout(() => tip.remove(), 750);
+}
+
+/* ═══════════════════════════════════════════
+   CHANGE VALUE
+═══════════════════════════════════════════ */
+function changeValue(id, delta, triggerEl) {
+  const oldVal  = values[id] || 0;
+  const total   = getTotal();
+  const remain  = 100 - total;
+  let newVal;
+
+  if (delta > 0) {
+    newVal = clamp(oldVal + delta, 0, oldVal + remain);
+  } else {
+    newVal = clamp(oldVal + delta, 0, 100);
+  }
+
+  if (newVal === oldVal) {
+    if (delta > 0 && remain === 0) {
+      // shake the input to signal "full"
+      const input = document.querySelector('[data-input="' + id + '"]');
+      if (input) { input.style.borderColor = '#e05050'; setTimeout(() => input.style.borderColor = '', 600); }
+    }
+    return;
+  }
+
+  values[id] = newVal;
+
+  const diff = newVal - oldVal;
+  if (triggerEl) showFloatTip(triggerEl, (diff > 0 ? '+' : '') + diff + '%', diff > 0 ? '#f0ede8' : '#888');
+
+  updateAll();
+  startAnim();
+}
+
+/* ═══════════════════════════════════════════
+   UPDATE UI
+═══════════════════════════════════════════ */
+function updateAll() {
+  const total   = getTotal();
+  const remain  = 100 - total;
+  const active  = getActive();
+  const rating  = getRating();
+
+  // Total badge
+  const badge = document.getElementById('totalBadge');
+  const numEl = document.getElementById('totalNum');
+  numEl.textContent = total;
+  badge.className = 'total-badge' + (total > 100 ? ' over' : total === 100 ? ' done' : '');
+
+  // Remaining label
+  document.getElementById('remainLabel').textContent =
+    remain > 0 ? remain + '% remaining' : remain === 0 ? '✓ Mix complete' : 'Over by ' + Math.abs(remain) + '%';
+
+  // Progress
+  document.getElementById('progressFill').style.width = Math.min(total, 100) + '%';
+
+  // Rating
+  const rv = document.getElementById('ratingValue');
+  rv.textContent = active === 0 ? '—' : rating.label;
+  rv.style.color = rating.color;
+
+  // Canvas state
+  document.getElementById('canvasWrap').classList.toggle('complete', total === 100);
+
+  // Legend
+  const legend = document.getElementById('mixLegend');
+  legend.innerHTML = '';
+  FLAVORS.forEach(f => {
+    const v = values[f.id] || 0;
+    if (v === 0) return;
+    const li = document.createElement('div');
+    li.className = 'legend-item';
+    li.innerHTML = `<span class="legend-dot" style="background:${f.color}"></span>
+                    <span class="legend-name">${f.name}</span>
+                    <span class="legend-pct">${v}%</span>`;
+    legend.appendChild(li);
+    requestAnimationFrame(() => li.classList.add('visible'));
+  });
+
+  // Update each row
+  FLAVORS.forEach(f => {
+    const v    = values[f.id] || 0;
+    const row  = document.querySelector('[data-row="' + f.id + '"]');
+    const inp  = document.querySelector('[data-input="' + f.id + '"]');
+    const plus = document.querySelector('[data-plus="' + f.id + '"]');
+    const mns  = document.querySelector('[data-minus="' + f.id + '"]');
+    if (!row) return;
+    row.classList.toggle('active', v > 0);
+    if (inp) inp.value = v;
+    if (plus) plus.disabled = (remain <= 0 && v === values[f.id]);
+    if (mns)  mns.disabled  = v === 0;
+  });
+
+  // Submit section
+  const si = document.getElementById('submitInner');
+  si.classList.toggle('visible', total === 100);
+
+  if (total === 100) {
+    // Build summary chips
+    const sm = document.getElementById('mixSummary');
+    sm.innerHTML = '';
+    FLAVORS.forEach(f => {
+      const v = values[f.id] || 0;
+      if (!v) return;
+      const chip = document.createElement('span');
+      chip.className = 'mix-chip';
+      chip.innerHTML = `<span class="mix-chip-dot" style="background:${f.color}"></span>${f.name} ${v}%`;
+      sm.appendChild(chip);
+    });
+    // Build hidden recipe
+    const recipe = FLAVORS.filter(f => values[f.id] > 0)
+      .map(f => f.name + ': ' + values[f.id] + '%').join(' | ');
+    document.getElementById('hiddenRecipe').value = recipe;
+    // Scroll to submit
+    setTimeout(() => {
+      document.getElementById('submitInner').scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 400);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   BUILD FLAVOR ROWS
+═══════════════════════════════════════════ */
+const list = document.getElementById('flavorList');
+
+FLAVORS.forEach(f => {
+  const row = document.createElement('div');
+  row.className = 'flavor-row';
+  row.setAttribute('data-row', f.id);
+
+  row.innerHTML = `
+    <span class="frow-dot" style="background:${f.color}"></span>
+    <span class="frow-name">${f.name}</span>
+    <div class="frow-controls">
+      <button class="frow-btn minus" data-minus="${f.id}" title="−${STEP}%">−</button>
+      <div class="frow-input-wrap">
+        <input class="frow-input" type="number" min="0" max="100"
+               value="0" data-input="${f.id}" />
+        <span class="frow-pct">%</span>
+      </div>
+      <button class="frow-btn plus" data-plus="${f.id}" title="+${STEP}%">+</button>
+    </div>
+  `;
+  list.appendChild(row);
+});
+
+// Bind buttons
+document.querySelectorAll('[data-plus]').forEach(btn => {
+  btn.addEventListener('click', () => changeValue(btn.dataset.plus, STEP, btn));
+});
+document.querySelectorAll('[data-minus]').forEach(btn => {
+  btn.addEventListener('click', () => changeValue(btn.dataset.minus, -STEP, btn));
+});
+
+// Bind direct input
+document.querySelectorAll('[data-input]').forEach(inp => {
+  inp.addEventListener('change', () => {
+    const id  = inp.dataset.input;
+    const old = values[id] || 0;
+    const raw = parseInt(inp.value, 10) || 0;
+    const delta = raw - old;
+    changeValue(id, delta, inp);
+  });
+  // Prevent scroll wheel changing value
+  inp.addEventListener('wheel', e => e.preventDefault(), { passive:false });
+});
+
+// Reset
+document.getElementById('resetBtn').addEventListener('click', () => {
+  FLAVORS.forEach(f => { values[f.id] = 0; });
+  updateAll();
+  startAnim();
+});
+
+/* ═══════════════════════════════════════════
+   FORM SUBMIT
+═══════════════════════════════════════════ */
+const mixForm = document.getElementById('mixForm');
+const formSuccess = document.getElementById('formSuccess');
+
+mixForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending…'; btn.disabled = true; btn.style.opacity = '.6';
+
+  fetch('https://formsubmit.co/ajax/dmashkovjob@gmail.com', {
+    method:'POST',
+    headers:{ 'Accept':'application/json' },
+    body: new FormData(mixForm)
+  })
+  .then(r => r.json())
+  .then(json => {
+    if (json.success === 'true' || json.success === true) {
+      mixForm.reset();
+      formSuccess.classList.add('show');
+    } else {
+      alert('Something went wrong. Try again.');
+    }
+  })
+  .catch(() => alert('Network error. Please try again.'))
+  .finally(() => {
+    btn.textContent = 'Send My Mix →'; btn.disabled = false; btn.style.opacity = '1';
+  });
+});
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+updateAll();
+drawDonut();
+</script>
+
+</body>
+</html>
