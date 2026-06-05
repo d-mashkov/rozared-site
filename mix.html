@@ -6,7 +6,7 @@
   <title>Create Your Mix — RozaRed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -112,9 +112,30 @@
       opacity:.8;
     }
     .page-hero h1 {
-      font-size:clamp(2.2rem,5vw,3.8rem); font-weight:300;
-      color:var(--white); letter-spacing:.06em; text-transform:uppercase;
-      margin-bottom:20px; line-height:1.05;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 900;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      line-height: 1.0;
+      margin-bottom: 24px;
+
+      /* Барочная палитра Эрмитажа: золото → алый → фиолет → кобальт */
+      background: linear-gradient(
+        118deg,
+        #f0c840 0%,
+        #e86030 22%,
+        #c82858 48%,
+        #7830b8 72%,
+        #3858e0 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+
+      /* Свечение под текстом */
+      filter:
+        drop-shadow(0 0 48px rgba(200, 60, 80, .28))
+        drop-shadow(0 4px 24px rgba(100, 40, 180, .22));
     }
     .page-hero .sub {
       font-size:.9rem; color:#666; max-width:500px;
@@ -537,7 +558,7 @@
       .submit-section { padding:0 20px 60px; }
       /* Hero — reduced top padding, no bottom padding */
       .page-hero { padding:48px 20px 0; }
-      .page-hero h1 { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+      .page-hero h1 { font-size: clamp(2rem, 10vw, 3.4rem); }
     }
 
     @media (max-width: 560px) {
@@ -556,8 +577,8 @@
       .flavor-row { padding:12px 12px; gap:8px; }
       .frow-input { width:44px; }
       /* Hero ultra-small */
-      .page-hero { padding:36px 16px 0; }
-      .page-hero h1 { font-size: clamp(1.6rem, 7vw, 2.2rem); margin-bottom:14px; }
+      .page-hero { padding:32px 16px 0; }
+      .page-hero h1 { font-size: clamp(1.8rem, 11vw, 2.8rem); margin-bottom:14px; }
       .page-hero .sub { font-size:.82rem; margin-bottom:22px; }
     }
   </style>
