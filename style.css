@@ -567,17 +567,17 @@ img { display: block; max-width: 100%; }
   align-items: center;
   width: fit-content;
   margin: 0 auto 56px;
-  gap: 8px;
+  gap: 12px;
 }
 .format-tab {
-  padding: 11px 44px;
+  padding: 14px 36px;
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid #282828;
   border-radius: var(--radius);
   color: var(--muted);
   font-size: 0.72rem;
   font-family: var(--font);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
   text-decoration: none;
@@ -586,18 +586,18 @@ img { display: block; max-width: 100%; }
   font-weight: 400;
 }
 .format-tab.active {
-  background: var(--accent); color: var(--white);
-  border-color: var(--accent);
+  border-color: var(--accent); color: var(--accent);
 }
-.format-tab:not(.active):hover { color: var(--white); border-color: #444; }
+.format-tab:not(.active):hover { color: var(--white); border-color: #484848; }
 .format-tab--mixes {
+  border-color: rgba(181,48,42,.4) !important;
   color: var(--accent) !important;
-  border-color: rgba(181,48,42,.35) !important;
 }
 .format-tab--mixes:hover {
   background: var(--accent) !important;
   color: var(--white) !important;
   border-color: var(--accent) !important;
+  box-shadow: 0 0 24px rgba(181,48,42,.25);
 }
 
 .catalog-grid {
@@ -722,13 +722,31 @@ img { display: block; max-width: 100%; }
 }
 .format-card--mixes:hover .format-size--mixes { opacity: 1; }
 
-/* ─── NAV MIXOLOGY ─── */
-.nav-mixology {
-  color: var(--accent) !important;
-  opacity: 0.75;
-  transition: opacity 0.3s !important;
+/* ─── BTN MIXOLOGY HEADER ─── */
+.btn-mixology-header {
+  display: inline-block;
+  padding: 8px 20px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--font);
+  font-weight: 400;
+  border: 1px solid #282828;
+  border-radius: var(--radius);
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background var(--ease), color var(--ease), border-color var(--ease);
 }
-.nav-mixology:hover { opacity: 1 !important; }
+.btn-mixology-header:hover {
+  color: var(--white);
+  border-color: #484848;
+}
+.btn-mixology-header.active-page {
+  color: var(--accent);
+  border-color: rgba(181,48,42,.4);
+}
 
 /* ─── 50g SCREEN ─── */
 .format-50g-screen {
