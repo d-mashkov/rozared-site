@@ -93,6 +93,83 @@
     }
     .prize-badge .icon { font-size:1rem; }
 
+    /* ── CURATOR PICKS ── */
+    .curator-section {
+      padding: 72px 40px 64px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .curator-section::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(181,48,42,.04) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .curator-header {
+      text-align:center; margin-bottom:52px;
+    }
+    .curator-header .label {
+      font-size:.58rem; letter-spacing:.32em; text-transform:uppercase;
+      color:var(--accent); display:block; margin-bottom:14px;
+    }
+    .curator-header h2 {
+      font-size:clamp(1.2rem,2.5vw,1.8rem); font-weight:300;
+      color:var(--white); letter-spacing:.06em; text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .curator-header p {
+      font-size:.82rem; color:var(--muted); font-weight:300; max-width:440px; margin:0 auto;
+    }
+
+    .picks-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+      max-width:1100px; margin:0 auto;
+    }
+
+    .pick-card {
+      background:var(--bg3); border:1px solid var(--border);
+      border-radius:12px; padding:32px 24px 28px;
+      display:flex; flex-direction:column; align-items:center;
+      gap:0;
+      transition:border-color .35s, transform .35s, box-shadow .35s;
+      cursor:default; position:relative; overflow:hidden;
+    }
+    .pick-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:1px;
+      background:linear-gradient(90deg, transparent, var(--pick-color, #555), transparent);
+      opacity:.5;
+    }
+    .pick-card:hover {
+      border-color:rgba(255,255,255,.08);
+      transform:translateY(-4px);
+      box-shadow:0 16px 48px rgba(0,0,0,.4);
+    }
+
+    /* Small donut */
+    .pick-canvas-wrap { position:relative; margin-bottom:24px; }
+    .pick-canvas { border-radius:50%; display:block; }
+
+    /* Percent tags below canvas */
+    .pick-percents {
+      display:flex; flex-wrap:wrap; justify-content:center;
+      gap:6px; margin-bottom:20px;
+    }
+    .pick-pct-tag {
+      display:inline-flex; align-items:center; gap:5px;
+      font-size:.62rem; letter-spacing:.04em; color:var(--text);
+      background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+      padding:3px 9px; border-radius:20px;
+    }
+    .pick-pct-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+
+    .pick-name {
+      font-size:1rem; font-weight:500; color:var(--white);
+      letter-spacing:.04em; margin-bottom:8px; text-align:center;
+    }
+    .pick-desc {
+      font-size:.76rem; color:var(--muted); font-weight:300;
+      line-height:1.65; text-align:center; max-width:220px;
+    }
+
     /* ── MAIN LAYOUT ── */
     .mix-layout {
       display:grid; grid-template-columns:380px 1fr;
@@ -379,6 +456,14 @@
     .reset-btn:hover { color:var(--white); border-color:#444; }
 
     /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .picks-grid { grid-template-columns:repeat(2,1fr); }
+      .curator-section { padding:52px 24px 48px; }
+    }
+    @media (max-width: 560px) {
+      .picks-grid { grid-template-columns:1fr; gap:16px; }
+    }
+
     @media (max-width: 860px) {
       .mix-layout { grid-template-columns:1fr; }
       .bowl-panel {
@@ -428,6 +513,16 @@
     <span class="icon">👕</span>
     Best mixes win merch &amp; get published
   </div>
+</section>
+
+<!-- CURATOR PICKS -->
+<section class="curator-section">
+  <div class="curator-header">
+    <span class="label">From Our Lab</span>
+    <h2>Curator's Picks</h2>
+    <p>Mixes crafted by our master blender. Use them as inspiration or try to beat them.</p>
+  </div>
+  <div class="picks-grid" id="picksGrid"></div>
 </section>
 
 <!-- MAIN -->
@@ -948,6 +1043,166 @@ mixForm.addEventListener('submit', function(e) {
     btn.textContent = 'Send My Mix →'; btn.disabled = false; btn.style.opacity = '1';
   });
 });
+
+/* ═══════════════════════════════════════════
+   CURATOR PICKS
+═══════════════════════════════════════════ */
+const PICKS = [
+  {
+    name: 'Forest Lemonade',
+    desc: 'Bright citrus with a breath of pine. Light, clean, energizing.',
+    recipe: [
+      { id:'lemon-lime',  pct:70 },
+      { id:'coniferous',  pct:30 },
+    ]
+  },
+  {
+    name: 'Cool Summer',
+    desc: 'Juicy watermelon chilled by spearmint. The perfect heat-break.',
+    recipe: [
+      { id:'watermelon',  pct:70 },
+      { id:'gum-mint',    pct:30 },
+    ]
+  },
+  {
+    name: 'Tropical Duo',
+    desc: 'Two exotic fruits in perfect harmony. Sweet, floral, balanced.',
+    recipe: [
+      { id:'mango',   pct:50 },
+      { id:'lychee',  pct:50 },
+    ]
+  },
+  {
+    name: 'Silk Paradise',
+    desc: 'Creamy lychee base wrapped in tropical softness. Smooth and dreamy.',
+    recipe: [
+      { id:'lychee',  pct:50 },
+      { id:'milk',    pct:25 },
+      { id:'mango',   pct:25 },
+    ]
+  },
+  {
+    name: 'Alpine Tea',
+    desc: 'Forest air meets oolong depth. Complex, cool, sophisticated.',
+    recipe: [
+      { id:'gum-mint',   pct:50 },
+      { id:'coniferous', pct:30 },
+      { id:'tieguanyin', pct:20 },
+    ]
+  },
+  {
+    name: 'Blossom',
+    desc: 'Ripe summer fruits kissed by jasmine petals. Elegant and delicate.',
+    recipe: [
+      { id:'watermelon', pct:40 },
+      { id:'lychee',     pct:40 },
+      { id:'jasmine',    pct:20 },
+    ]
+  },
+];
+
+function getFlavor(id) { return FLAVORS.find(f => f.id === id); }
+
+function drawPickDonut(canvas, recipe) {
+  const dpr2  = Math.min(window.devicePixelRatio || 1, 2);
+  const SIZE  = 140;
+  canvas.width  = SIZE * dpr2;
+  canvas.height = SIZE * dpr2;
+  canvas.style.width  = SIZE + 'px';
+  canvas.style.height = SIZE + 'px';
+  const c  = canvas.getContext('2d');
+  c.scale(dpr2, dpr2);
+  const CX = SIZE / 2, CY = SIZE / 2;
+  const OR = SIZE * 0.44;
+  const IR = SIZE * 0.28;
+
+  // Background
+  c.beginPath(); c.arc(CX, CY, OR, 0, Math.PI*2);
+  c.fillStyle = '#141414'; c.fill();
+
+  // Segments
+  let angle = -Math.PI / 2;
+  recipe.forEach(({ id, pct }) => {
+    const f = getFlavor(id);
+    if (!f) return;
+    const sweep = (pct / 100) * Math.PI * 2;
+    c.beginPath();
+    c.arc(CX, CY, OR, angle, angle + sweep);
+    c.arc(CX, CY, IR, angle + sweep, angle, true);
+    c.closePath();
+    const mid = angle + sweep / 2;
+    const gx1 = CX + IR * Math.cos(mid), gy1 = CY + IR * Math.sin(mid);
+    const gx2 = CX + OR * Math.cos(mid), gy2 = CY + OR * Math.sin(mid);
+    const grad = c.createLinearGradient(gx1, gy1, gx2, gy2);
+    grad.addColorStop(0, f.color + 'cc');
+    grad.addColorStop(1, f.color);
+    c.fillStyle = grad;
+    c.fill();
+    c.strokeStyle = '#080808'; c.lineWidth = 1.5; c.stroke();
+    angle += sweep;
+  });
+
+  // Hole
+  c.beginPath(); c.arc(CX, CY, IR - 1, 0, Math.PI*2);
+  c.fillStyle = '#080808'; c.fill();
+
+  // Center: check
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.font = '500 ' + Math.round(SIZE * 0.13) + 'px DM Sans';
+  c.fillStyle = '#f0ede8';
+  c.fillText('100%', CX, CY);
+}
+
+function buildPickCards() {
+  const grid = document.getElementById('picksGrid');
+  PICKS.forEach(pick => {
+    const primaryColor = getFlavor(pick.recipe[0].id)?.color || '#555';
+
+    const card = document.createElement('div');
+    card.className = 'pick-card';
+    card.style.setProperty('--pick-color', primaryColor);
+
+    // Canvas
+    const canvasWrap = document.createElement('div');
+    canvasWrap.className = 'pick-canvas-wrap';
+    const cv = document.createElement('canvas');
+    cv.className = 'pick-canvas';
+    canvasWrap.appendChild(cv);
+    card.appendChild(canvasWrap);
+
+    // Percent tags
+    const tagsEl = document.createElement('div');
+    tagsEl.className = 'pick-percents';
+    pick.recipe.forEach(({ id, pct }) => {
+      const f = getFlavor(id);
+      if (!f) return;
+      const tag = document.createElement('span');
+      tag.className = 'pick-pct-tag';
+      tag.innerHTML = `<span class="pick-pct-dot" style="background:${f.color}"></span>${f.name} ${pct}%`;
+      tagsEl.appendChild(tag);
+    });
+    card.appendChild(tagsEl);
+
+    // Name
+    const nameEl = document.createElement('div');
+    nameEl.className = 'pick-name';
+    nameEl.textContent = pick.name;
+    card.appendChild(nameEl);
+
+    // Desc
+    const descEl = document.createElement('div');
+    descEl.className = 'pick-desc';
+    descEl.textContent = pick.desc;
+    card.appendChild(descEl);
+
+    grid.appendChild(card);
+
+    // Draw after appended (needs to be in DOM for size)
+    requestAnimationFrame(() => drawPickDonut(cv, pick.recipe));
+  });
+}
+
+buildPickCards();
 
 /* ═══════════════════════════════════════════
    INIT
