@@ -36,11 +36,25 @@
       overflow-x: hidden;
     }
 
+    /* ── LANG ── */
+    .top-lang { display:flex; align-items:center; gap:6px; }
+    .top-lang-btn {
+      background:none; border:none; cursor:pointer;
+      font-size:.7rem; letter-spacing:.1em; color:var(--muted);
+      font-family:var(--font); padding:3px 2px;
+      transition:color var(--ease);
+    }
+    .top-lang-btn.active { color:var(--accent); }
+    .top-lang-btn:hover  { color:var(--white); }
+    .top-lang-div { color:#2a2a2a; font-size:.8rem; }
+
     /* ── TICKER ── */
     .ticker {
       overflow:hidden; white-space:nowrap;
-      background:#0e0e0e; border-bottom:1px solid #1a1a1a;
-      padding:11px 0; user-select:none;
+      background:rgba(255,255,255,.03);
+      border-top:1px solid rgba(255,255,255,.04);
+      margin-top:28px;
+      padding:10px 0; user-select:none; border-radius:4px;
     }
     .ticker-track {
       display:inline-flex; gap:0;
@@ -213,10 +227,12 @@
       margin-bottom:14px;
     }
     .pick-author {
-      font-size:.6rem; letter-spacing:.16em; text-transform:uppercase;
+      font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
       color:#2e2e2e; font-weight:400; text-align:center;
+      display:flex; align-items:center; justify-content:center; gap:5px;
     }
-    .pick-author span { color:#484848; }
+    .pick-author span { color:#505050; }
+    .pick-trophy { font-size:.75rem; line-height:1; }
 
     /* Animate in */
     .pick-card {
@@ -554,45 +570,57 @@
 </head>
 <body>
 
-<!-- TICKER -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track" id="tickerTrack"></div>
-</div>
-
 <!-- TOP BAR -->
 <header class="top-bar">
   <a href="index.html">
     <img src="images/logo.svg" alt="RozaRed" class="top-logo" />
   </a>
-  <a href="index.html" class="top-back">← Back to site</a>
+  <div class="top-lang">
+    <button class="top-lang-btn active" data-lang="en">EN</button>
+    <span class="top-lang-div">|</span>
+    <button class="top-lang-btn" data-lang="zh">中文</button>
+  </div>
+  <a href="index.html" class="top-back"
+     data-en="← Back to site" data-zh="← 返回网站">← Back to site</a>
 </header>
 
 <!-- HERO -->
 <section class="page-hero">
-  <span class="label">RozaRed Challenge</span>
-  <h1>Create Your Mix</h1>
-  <p class="sub">
+  <span class="label" data-en="RozaRed Challenge" data-zh="RozaRed 挑战赛">RozaRed Challenge</span>
+  <h1 data-en="Create Your Mix" data-zh="创建你的配方">Create Your Mix</h1>
+  <p class="sub"
+     data-en="Choose from 10 signature flavors, set your percentages, and craft a 100% original blend. The most creative mixes win a RozaRed T-Shirt and get featured on our channel."
+     data-zh="从10种标志性风味中选择，设定比例，调配属于你的100%原创配方。最具创意的配方将赢得 RozaRed T恤并登上我们的频道。">
     Choose from 10 signature flavors, set your percentages, and craft a 100% original blend.
     The most creative mixes win a <strong style="color:var(--white)">RozaRed T-Shirt</strong> and get featured on our channel.
   </p>
   <div class="prize-badge">
     <span class="icon">👕</span>
-    Best mixes win merch &amp; get published
+    <span data-en="Best mixes win merch &amp; get published" data-zh="最佳配方赢得周边并公开发布">Best mixes win merch &amp; get published</span>
+  </div>
+  <!-- TICKER inside hero -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="tickerTrack"></div>
   </div>
 </section>
 
 <!-- TABS -->
 <nav class="mix-tabs">
-  <a href="#curator" class="mix-tab active" id="tabPicks">Наши миксы</a>
-  <a href="#creator" class="mix-tab" id="tabCreate">Создать микс</a>
+  <a href="#curator" class="mix-tab active" id="tabPicks"
+     data-en="Our Mixes" data-zh="我们的配方">Our Mixes</a>
+  <a href="#creator" class="mix-tab" id="tabCreate"
+     data-en="Create Mix" data-zh="创建配方">Create Mix</a>
 </nav>
 
 <!-- CURATOR PICKS -->
 <section class="curator-section" id="curator">
   <div class="curator-header">
-    <span class="label">From Our Lab</span>
-    <h2>Curator's Picks</h2>
-    <p>Mixes crafted by our master blender. Use them as inspiration or try to beat them.</p>
+    <span class="label" data-en="From Our Lab" data-zh="来自我们实验室">From Our Lab</span>
+    <h2 data-en="Curator's Picks" data-zh="精选配方">Curator's Picks</h2>
+    <p data-en="Mixes crafted by our master blender. Use them as inspiration or try to beat them."
+       data-zh="由我们的首席调味师精心调配。以此为灵感，或尝试超越它们。">
+      Mixes crafted by our master blender. Use them as inspiration or try to beat them.
+    </p>
   </div>
   <div class="picks-grid" id="picksGrid"></div>
 </section>
@@ -608,13 +636,13 @@
       </div>
 
       <div class="mix-rating">
-        <span class="rating-label">Mix Profile</span>
+        <span class="rating-label" data-en="Mix Profile" data-zh="配方档案">Mix Profile</span>
         <span class="rating-value" id="ratingValue">—</span>
       </div>
 
       <div class="progress-wrap">
         <div class="progress-meta">
-          <span>Filled</span>
+          <span data-en="Filled" data-zh="已填充">Filled</span>
           <span class="remain" id="remainLabel">100% remaining</span>
         </div>
         <div class="progress-bar">
@@ -628,11 +656,12 @@
     <!-- RIGHT: FLAVOR CONTROLS -->
     <section class="flavors-panel">
       <div class="flavors-header">
-        <h2>Choose flavors</h2>
+        <h2 data-en="Choose flavors" data-zh="选择口味">Choose flavors</h2>
         <div class="total-badge" id="totalBadge">
-          Total: <span class="total-num" id="totalNum">0</span>%
+          <span data-en="Total:" data-zh="总计:">Total:</span>
+          <span class="total-num" id="totalNum">0</span>%
           &nbsp;
-          <button class="reset-btn" id="resetBtn">Reset</button>
+          <button class="reset-btn" id="resetBtn" data-en="Reset" data-zh="重置">Reset</button>
         </div>
       </div>
 
@@ -647,10 +676,10 @@
   <div class="submit-inner" id="submitInner">
     <div class="submit-hero">
       <span class="crown">🏆</span>
-      <h2>Your Mix is Ready!</h2>
-      <p>
-        Give your mix a name, leave your contact details,<br>
-        and send it to us. We'll review the best submissions.
+      <h2 data-en="Your Mix is Ready!" data-zh="你的配方已完成！">Your Mix is Ready!</h2>
+      <p data-en="Give your mix a name, leave your contact details, and send it to us. We'll review the best submissions."
+         data-zh="为你的配方命名，留下联系方式，发送给我们。我们将评选最佳作品。">
+        Give your mix a name, leave your contact details, and send it to us. We'll review the best submissions.
       </p>
     </div>
 
@@ -666,27 +695,32 @@
 
       <div class="sf-group">
         <input type="text" name="mix_name" id="mixName" required placeholder=" " />
-        <label>Mix Name (make it creative!)</label>
+        <label data-en="Mix Name (make it creative!)" data-zh="配方名称（发挥创意！）">Mix Name (make it creative!)</label>
       </div>
       <div class="sf-group">
         <input type="text" name="author_name" required placeholder=" " />
-        <label>Your Name</label>
+        <label data-en="Your Name" data-zh="你的名字">Your Name</label>
       </div>
       <div class="sf-group">
         <input type="email" name="email" required placeholder=" " />
-        <label>Email or WeChat ID</label>
+        <label data-en="Email or WeChat ID" data-zh="邮箱或微信号">Email or WeChat ID</label>
       </div>
       <div class="sf-group">
         <textarea name="notes" rows="3" placeholder=" "></textarea>
-        <label>Tell us about your mix (optional)</label>
+        <label data-en="Tell us about your mix (optional)" data-zh="介绍你的配方（可选）">Tell us about your mix (optional)</label>
       </div>
 
-      <button type="submit" class="submit-btn" id="submitBtn">Send My Mix →</button>
-      <p class="submit-fine">
+      <button type="submit" class="submit-btn" id="submitBtn"
+              data-en="Send My Mix →" data-zh="发送我的配方 →">Send My Mix →</button>
+      <p class="submit-fine"
+         data-en="By submitting you agree to have your mix featured on our channel. We'll contact the winners within 7 days."
+         data-zh="提交即表示你同意将配方发布在我们的频道。我们将在7天内联系获奖者。">
         By submitting you agree to have your mix featured on our channel.<br>
         We'll contact the winners within 7 days.
       </p>
-      <div class="form-success" id="formSuccess">
+      <div class="form-success" id="formSuccess"
+           data-en="🎉 Mix received! We'll review it and contact you soon. Good luck!"
+           data-zh="🎉 配方已收到！我们将尽快审核并联系你。祝你好运！">
         🎉 Mix received! We'll review it and contact you soon. Good luck!
       </div>
     </form>
@@ -711,13 +745,18 @@ const FLAVORS = [
 ];
 
 const RATINGS = [
-  { min:0,  max:0,  label:'Empty Bowl',     color:'#333' },
-  { min:1,  max:1,  label:'Pure',           color:'#C8B090' },
-  { min:2,  max:3,  label:'Focused Blend',  color:'#9B7240' },
-  { min:4,  max:5,  label:'Balanced Blend', color:'#3D8C60' },
-  { min:6,  max:8,  label:'Adventurous',    color:'#F5A42A' },
-  { min:9,  max:10, label:'Masterblend',    color:'#b5302a' },
+  { min:0,  max:0,  label:'Empty Bowl',     labelZh:'空碗',       color:'#333' },
+  { min:1,  max:1,  label:'Pure',           labelZh:'纯粹',       color:'#C8B090' },
+  { min:2,  max:3,  label:'Focused Blend',  labelZh:'专注调配',   color:'#9B7240' },
+  { min:4,  max:5,  label:'Balanced Blend', labelZh:'均衡调配',   color:'#3D8C60' },
+  { min:6,  max:8,  label:'Adventurous',    labelZh:'大胆创新',   color:'#F5A42A' },
+  { min:9,  max:10, label:'Masterblend',    labelZh:'大师调配',   color:'#b5302a' },
 ];
+
+/* ═══════════════════════════════════════════
+   LANG
+═══════════════════════════════════════════ */
+let currentLang = 'en';
 
 /* ═══════════════════════════════════════════
    STATE
@@ -826,17 +865,17 @@ function drawDonut() {
   if (total === 0) {
     ctx.font = '300 12px DM Sans';
     ctx.fillStyle = '#2a2a2a';
-    ctx.fillText('Add flavors', CX, CY - 8);
+    ctx.fillText(currentLang === 'zh' ? '添加口味' : 'Add flavors', CX, CY - 8);
     ctx.font = '300 11px DM Sans';
     ctx.fillStyle = '#1e1e1e';
-    ctx.fillText('to fill your bowl', CX, CY + 10);
+    ctx.fillText(currentLang === 'zh' ? '填满你的碗' : 'to fill your bowl', CX, CY + 10);
   } else if (total === 100) {
     ctx.font = '600 13px DM Sans';
     ctx.fillStyle = '#b5302a';
-    ctx.fillText('READY', CX, CY - 10);
+    ctx.fillText(currentLang === 'zh' ? '完成' : 'READY', CX, CY - 10);
     ctx.font = '300 10px DM Sans';
     ctx.fillStyle = '#555';
-    ctx.fillText('scroll down ↓', CX, CY + 9);
+    ctx.fillText(currentLang === 'zh' ? '向下滚动 ↓' : 'scroll down ↓', CX, CY + 9);
   } else {
     ctx.font = '600 ' + Math.round(S * 0.14) + 'px DM Sans';
     ctx.fillStyle = '#f0ede8';
@@ -961,15 +1000,18 @@ function updateAll() {
   badge.className = 'total-badge' + (total > 100 ? ' over' : total === 100 ? ' done' : '');
 
   // Remaining label
+  const zh = currentLang === 'zh';
   document.getElementById('remainLabel').textContent =
-    remain > 0 ? remain + '% remaining' : remain === 0 ? '✓ Mix complete' : 'Over by ' + Math.abs(remain) + '%';
+    remain > 0 ? remain + (zh ? '% 剩余' : '% remaining')
+    : remain === 0 ? (zh ? '✓ 配方完成' : '✓ Mix complete')
+    : (zh ? '超出 ' + Math.abs(remain) + '%' : 'Over by ' + Math.abs(remain) + '%');
 
   // Progress
   document.getElementById('progressFill').style.width = Math.min(total, 100) + '%';
 
   // Rating
   const rv = document.getElementById('ratingValue');
-  rv.textContent = active === 0 ? '—' : rating.label;
+  rv.textContent = active === 0 ? '—' : (zh ? rating.labelZh : rating.label);
   rv.style.color = rating.color;
 
   // Canvas state
@@ -984,7 +1026,7 @@ function updateAll() {
     const li = document.createElement('div');
     li.className = 'legend-item';
     li.innerHTML = `<span class="legend-dot" style="background:${f.color}"></span>
-                    <span class="legend-name">${f.name}</span>
+                    <span class="legend-name">${currentLang === 'zh' ? f.zh : f.name}</span>
                     <span class="legend-pct">${v}%</span>`;
     legend.appendChild(li);
     requestAnimationFrame(() => li.classList.add('visible'));
@@ -1017,7 +1059,7 @@ function updateAll() {
       if (!v) return;
       const chip = document.createElement('span');
       chip.className = 'mix-chip';
-      chip.innerHTML = `<span class="mix-chip-dot" style="background:${f.color}"></span>${f.name} ${v}%`;
+      chip.innerHTML = `<span class="mix-chip-dot" style="background:${f.color}"></span>${currentLang === 'zh' ? f.zh : f.name} ${v}%`;
       sm.appendChild(chip);
     });
     // Build hidden recipe
@@ -1043,7 +1085,7 @@ FLAVORS.forEach(f => {
 
   row.innerHTML = `
     <span class="frow-dot" style="background:${f.color}"></span>
-    <span class="frow-name">${f.name}</span>
+    <span class="frow-name" data-en="${f.name}" data-zh="${f.zh}">${f.name}</span>
     <div class="frow-controls">
       <button class="frow-btn minus" data-minus="${f.id}" title="−${STEP}%">−</button>
       <div class="frow-input-wrap">
@@ -1094,7 +1136,9 @@ const formSuccess = document.getElementById('formSuccess');
 mixForm.addEventListener('submit', function(e) {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
-  btn.textContent = 'Sending…'; btn.disabled = true; btn.style.opacity = '.6';
+  const origText = btn.textContent;
+  btn.textContent = currentLang === 'zh' ? '发送中…' : 'Sending…';
+  btn.disabled = true; btn.style.opacity = '.6';
 
   fetch('https://formsubmit.co/ajax/dmashkovjob@gmail.com', {
     method:'POST',
@@ -1105,14 +1149,15 @@ mixForm.addEventListener('submit', function(e) {
   .then(json => {
     if (json.success === 'true' || json.success === true) {
       mixForm.reset();
+      formSuccess.textContent = formSuccess.getAttribute('data-' + currentLang);
       formSuccess.classList.add('show');
     } else {
-      alert('Something went wrong. Try again.');
+      alert(currentLang === 'zh' ? '出错了，请重试。' : 'Something went wrong. Try again.');
     }
   })
-  .catch(() => alert('Network error. Please try again.'))
+  .catch(() => alert(currentLang === 'zh' ? '网络错误，请重试。' : 'Network error. Please try again.'))
   .finally(() => {
-    btn.textContent = 'Send My Mix →'; btn.disabled = false; btn.style.opacity = '1';
+    btn.textContent = origText; btn.disabled = false; btn.style.opacity = '1';
   });
 });
 
@@ -1123,7 +1168,8 @@ const PICKS = [
   {
     name: 'Forest Lemonade',
     desc: 'Bright citrus with a breath of pine. Light, clean, energizing.',
-    author: 'флейварист RozaRed',
+    descZh: '清新柠檬配松林气息，轻盈干净，充满活力。',
+    author: 'RozaRed Flavorist', authorZh: 'RozaRed 调味师', trophy: false,
     recipe: [
       { id:'lemon-lime', pct:70 },
       { id:'coniferous', pct:30 },
@@ -1132,7 +1178,8 @@ const PICKS = [
   {
     name: 'Cool Summer',
     desc: 'Juicy watermelon chilled by spearmint. The perfect heat-break.',
-    author: 'флейварист RozaRed',
+    descZh: '多汁西瓜配留兰香薄荷，完美消暑之选。',
+    author: 'RozaRed Flavorist', authorZh: 'RozaRed 调味师', trophy: false,
     recipe: [
       { id:'watermelon', pct:70 },
       { id:'gum-mint',   pct:30 },
@@ -1141,7 +1188,8 @@ const PICKS = [
   {
     name: 'Tropical Duo',
     desc: 'Two exotic fruits in perfect harmony. Sweet, floral, balanced.',
-    author: 'флейварист RozaRed',
+    descZh: '两种异域水果完美融合，甜美花香，浑然天成。',
+    author: 'RozaRed Flavorist', authorZh: 'RozaRed 调味师', trophy: false,
     recipe: [
       { id:'mango',  pct:50 },
       { id:'lychee', pct:50 },
@@ -1150,7 +1198,8 @@ const PICKS = [
   {
     name: 'Silk Paradise',
     desc: 'Creamy lychee base wrapped in tropical softness. Smooth and dreamy.',
-    author: 'Tiago J.',
+    descZh: '丝滑荔枝底味融入热带柔软，顺滑如梦。',
+    author: 'Tiago J.', authorZh: 'Tiago J.', trophy: true,
     recipe: [
       { id:'lychee', pct:50 },
       { id:'milk',   pct:25 },
@@ -1160,7 +1209,8 @@ const PICKS = [
   {
     name: 'Alpine Tea',
     desc: 'Forest air meets oolong depth. Complex, cool, sophisticated.',
-    author: 'флейварист RozaRed',
+    descZh: '森林气息与乌龙深度交融，复杂清凉，高雅精致。',
+    author: 'RozaRed Flavorist', authorZh: 'RozaRed 调味师', trophy: false,
     recipe: [
       { id:'gum-mint',   pct:50 },
       { id:'coniferous', pct:30 },
@@ -1170,7 +1220,8 @@ const PICKS = [
   {
     name: 'Blossom',
     desc: 'Ripe summer fruits kissed by jasmine petals. Elegant and delicate.',
-    author: 'Denis M.',
+    descZh: '成熟夏果配茉莉花瓣，优雅精致，沁人心脾。',
+    author: 'Denis M.', authorZh: 'Denis M.', trophy: true,
     recipe: [
       { id:'watermelon', pct:40 },
       { id:'lychee',     pct:40 },
@@ -1304,7 +1355,7 @@ function buildPickCards() {
       if (!f) return;
       const tag = document.createElement('span');
       tag.className = 'pick-pct-tag';
-      tag.innerHTML = `<span class="pick-pct-dot" style="background:${f.color}"></span>${f.name} ${pct}%`;
+      tag.innerHTML = `<span class="pick-pct-dot" style="background:${f.color}"></span>${currentLang === 'zh' ? f.zh : f.name} ${pct}%`;
       tagsEl.appendChild(tag);
     });
     card.appendChild(tagsEl);
@@ -1318,13 +1369,21 @@ function buildPickCards() {
     // Desc
     const descEl = document.createElement('div');
     descEl.className = 'pick-desc';
-    descEl.textContent = pick.desc;
+    descEl.setAttribute('data-en', pick.desc);
+    descEl.setAttribute('data-zh', pick.descZh);
+    descEl.textContent = currentLang === 'zh' ? pick.descZh : pick.desc;
     card.appendChild(descEl);
 
     // Author
     const authEl = document.createElement('div');
     authEl.className = 'pick-author';
-    authEl.innerHTML = `Автор — <span>${pick.author}</span>`;
+    authEl.dataset.en = pick.author;
+    authEl.dataset.zh = pick.authorZh;
+    authEl.dataset.trophy = pick.trophy ? '1' : '0';
+    const authorText = currentLang === 'zh' ? pick.authorZh : pick.author;
+    const authorLabel = currentLang === 'zh' ? '作者 — ' : 'Author — ';
+    authEl.innerHTML = (pick.trophy ? '<span class="pick-trophy">🏆</span>' : '') +
+      `${authorLabel}<span>${authorText}</span>`;
     card.appendChild(authEl);
 
     grid.appendChild(card);
@@ -1337,31 +1396,36 @@ buildPickCards();
 /* ═══════════════════════════════════════════
    TICKER
 ═══════════════════════════════════════════ */
-const TICKER_PHRASES = [
-  { text:'Лучшее качество' },
-  { text:'Суданская роза' },
-  { text:'Продукт высшего качества' },
-  { text:'100% Tobacco-Free' },
-  { text:'Никотин не входит в состав' },
-  { text:'10 уникальных вкусов' },
-  { text:'Докажи что ты лучший мастер' },
-  { text:'Мировой стандарт качества' },
-  { text:'Натуральный базовый компонент' },
-  { text:'Сделано с душой' },
-];
+const TICKER_PHRASES = {
+  en: [
+    'Premium Quality', 'Sudanese Rose', 'Top-Grade Product',
+    '100% Tobacco-Free', 'Nicotine-Free Formula', '10 Unique Flavors',
+    'Prove You Are the Best Blender', 'World Quality Standard',
+    'Natural Base Component', 'Made with Soul', 'Developed in Russia',
+  ],
+  zh: [
+    '优质品质', '苏丹玫瑰', '顶级产品',
+    '100% 无烟草', '无尼古丁配方', '10种独特风味',
+    '证明你是最佳调配师', '世界品质标准',
+    '天然基础成分', '用心制造', '俄罗斯研发',
+  ]
+};
 
-(function buildTicker() {
+function buildTicker() {
   const track = document.getElementById('tickerTrack');
-  // Duplicate x2 for seamless loop
+  track.innerHTML = '';
+  const phrases = TICKER_PHRASES[currentLang] || TICKER_PHRASES.en;
+  // Duplicate ×2 for seamless loop
   [0, 1].forEach(() => {
-    TICKER_PHRASES.forEach(ph => {
+    phrases.forEach(text => {
       const item = document.createElement('span');
       item.className = 'ticker-item';
-      item.innerHTML = `${ph.text}<span class="ticker-sep"></span>`;
+      item.innerHTML = `${text}<span class="ticker-sep"></span>`;
       track.appendChild(item);
     });
   });
-})();
+}
+buildTicker();
 
 /* ═══════════════════════════════════════════
    TABS
@@ -1392,6 +1456,46 @@ window.addEventListener('scroll', function() {
     tabPicks.classList.add('active'); tabCreate.classList.remove('active');
   }
 }, { passive: true });
+
+/* ═══════════════════════════════════════════
+   SET LANGUAGE
+═══════════════════════════════════════════ */
+function setLanguage(lang) {
+  currentLang = lang;
+
+  // Switch all static data-en/data-zh elements
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + lang);
+  });
+
+  // Active button state
+  document.querySelectorAll('.top-lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+  // Rebuild ticker in new lang
+  buildTicker();
+
+  // Update pick card authors + descs
+  const authorLabel = lang === 'zh' ? '作者 — ' : 'Author — ';
+  document.querySelectorAll('.pick-author').forEach(el => {
+    const trophy = el.dataset.trophy === '1';
+    const authorText = el.getAttribute('data-' + lang);
+    el.innerHTML = (trophy ? '<span class="pick-trophy">🏆</span>' : '') +
+      `${authorLabel}<span>${authorText}</span>`;
+  });
+
+  // Redraw canvas (updates center text language)
+  drawDonut();
+
+  // Update all dynamic UI strings
+  updateAll();
+}
+
+document.querySelectorAll('.top-lang-btn').forEach(b => {
+  b.addEventListener('click', () => setLanguage(b.dataset.lang));
+});
 
 /* ═══════════════════════════════════════════
    INIT
