@@ -696,6 +696,26 @@ img { display: block; max-width: 100%; }
   line-height: 1.55;
   font-weight: 300;
 }
+.format-card--mixes {
+  text-decoration: none;
+  cursor: pointer;
+  border-left: 1px solid var(--border-soft);
+}
+.format-card--mixes:hover { background: rgba(181,48,42,0.04); }
+.format-size--mixes {
+  color: var(--accent) !important;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+.format-card--mixes:hover .format-size--mixes { opacity: 1; }
+
+/* ─── NAV MIXOLOGY ─── */
+.nav-mixology {
+  color: var(--accent) !important;
+  opacity: 0.75;
+  transition: opacity 0.3s !important;
+}
+.nav-mixology:hover { opacity: 1 !important; }
 
 /* ─── 50g SCREEN ─── */
 .format-50g-screen {
