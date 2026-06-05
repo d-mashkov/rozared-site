@@ -994,6 +994,11 @@ img { display: block; max-width: 100%; }
   /* Шапка */
   .header-inner { gap: 16px; }
   .btn-contact-header { padding: 7px 14px; font-size: 0.65rem; }
+  .btn-mixology-header { padding: 7px 14px; font-size: 0.65rem; }
+
+  /* Format-tab tablet — reduce side padding */
+  .format-tab { padding: 0 24px 13px; }
+  .format-tab::after { left: 24px; right: 24px; }
 
   /* About */
   .about-editorial { grid-template-columns: 1fr; gap: 40px; }
@@ -1029,6 +1034,7 @@ img { display: block; max-width: 100%; }
   .catalog-formats { flex-direction: column; }
   .format-card { border-right: none; border-bottom: 1px solid var(--border-soft); }
   .format-card:last-child { border-bottom: none; }
+  .format-card--mixes { border-left: none; }
 
   /* Hero */
   .hero-logo { height: 76px; }
@@ -1073,8 +1079,10 @@ img { display: block; max-width: 100%; }
   .container { padding: 0 18px; }
   .section { padding: 72px 0; }
 
-  /* Шапка — скрыть "Contact Us", оставить бургер + лого + язык */
+  /* Шапка — скрыть кнопки, оставить бургер + лого + язык */
   .btn-contact-header { display: none; }
+  .btn-mixology-header { display: none; }
+  .header-actions { gap: 0; }
   .header-inner { gap: 12px; }
 
   /* Hero */
@@ -1119,8 +1127,10 @@ img { display: block; max-width: 100%; }
     line-height: 1.75;
   }
 
-  /* Format switcher */
-  .format-tab { padding: 10px 32px; }
+  /* Format switcher — text-tab style, reduce side padding */
+  .format-tab { padding: 0 18px 12px; font-size: 0.68rem; }
+  .format-tab::after { left: 18px; right: 18px; }
+  .format-switcher { margin-bottom: 36px; }
 
   /* Contact */
   .contact-form .btn { width: 100%; text-align: center; }
