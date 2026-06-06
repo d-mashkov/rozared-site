@@ -271,7 +271,7 @@ img { display: block; max-width: 100%; }
   position: fixed; inset: 0; z-index: 200;
   background: #060606;
   transform-origin: top;
-  animation: veilLift 2s cubic-bezier(0.76, 0, 0.24, 1) 0.3s forwards;
+  animation: veilLift 1.2s cubic-bezier(0.76, 0, 0.24, 1) 0.2s forwards;
 }
 @keyframes veilLift {
   0%   { transform: scaleY(1); }
@@ -282,6 +282,7 @@ img { display: block; max-width: 100%; }
 .hero-bg {
   position: absolute; inset: 0;
   background:
+    radial-gradient(ellipse 55% 45% at 50% 30%, rgba(181,48,42,0.09) 0%, transparent 60%),
     radial-gradient(ellipse 80% 70% at 50% 40%, #0d0505 0%, #060606 75%);
 }
 
@@ -290,8 +291,8 @@ img { display: block; max-width: 100%; }
   content: '';
   position: absolute;
   bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 60%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(181,48,42,0.12), transparent);
+  width: 70%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(181,48,42,0.2), transparent);
 }
 
 .hero-center {
@@ -307,28 +308,28 @@ img { display: block; max-width: 100%; }
   background: linear-gradient(90deg, transparent, #2a2020, transparent);
   animation: ruleExpand 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
-.h-top    { margin-bottom: 40px; animation-delay: 2s; }
-.h-bottom { margin-top: 40px;    animation-delay: 3s; }
+.h-top    { margin-bottom: 40px; animation-delay: 1.2s; }
+.h-bottom { margin-top: 40px;    animation-delay: 1.9s; }
 @keyframes ruleExpand {
   to { width: 120px; }
 }
 
 .hero-tag {
   font-size: 0.55rem; letter-spacing: 0.36em; text-transform: uppercase;
-  color: #3a3a3a; margin-bottom: 44px;
+  color: #4a4a4a; margin-bottom: 44px;
   opacity: 0;
-  animation: hFade 1.8s ease forwards 2.2s;
+  animation: hFade 1.4s ease forwards 1.3s;
   font-weight: 400;
 }
 
 .hero-logo-wrap {
   margin-bottom: 32px;
   opacity: 0;
-  animation: hFade 2.2s ease forwards 2.5s;
+  animation: hFade 1.6s ease forwards 1.5s;
 }
 .hero-logo {
-  height: 100px; width: auto;
-  filter: drop-shadow(0 2px 32px rgba(181,48,42,0.1));
+  height: 114px; width: auto;
+  filter: drop-shadow(0 2px 32px rgba(181,48,42,0.14));
   transition: filter 1s ease;
 }
 .hero-logo-wrap:hover .hero-logo {
@@ -337,17 +338,17 @@ img { display: block; max-width: 100%; }
 
 .hero-sub {
   font-size: 0.9rem; font-weight: 300;
-  color: #3c3c3c; letter-spacing: 0.08em;
+  color: #565656; letter-spacing: 0.08em;
   max-width: 400px; line-height: 2;
   opacity: 0;
-  animation: hFade 1.8s ease forwards 3.2s;
+  animation: hFade 1.4s ease forwards 2.0s;
 }
 
 .hero-actions {
   display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
   margin-top: 44px;
   opacity: 0;
-  animation: hFade 1.8s ease forwards 3.6s;
+  animation: hFade 1.4s ease forwards 2.4s;
 }
 
 /* Слоган внизу */
@@ -356,11 +357,11 @@ img { display: block; max-width: 100%; }
   z-index: 2;
   display: flex; align-items: center; justify-content: center; gap: 32px;
   opacity: 0;
-  animation: hFade 2.2s ease forwards 4s;
+  animation: hFade 1.6s ease forwards 2.7s;
 }
 .hero-slogan p {
   font-size: 0.58rem; letter-spacing: 0.32em; text-transform: uppercase;
-  color: #252525; font-weight: 300;
+  color: #323232; font-weight: 300;
 }
 .hero-slogan-line {
   display: block; width: 48px; height: 1px;
@@ -375,7 +376,7 @@ img { display: block; max-width: 100%; }
   position: absolute; bottom: 40px; right: 48px; z-index: 2;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   opacity: 0;
-  animation: hFade 1.8s ease forwards 4.2s;
+  animation: hFade 1.4s ease forwards 2.9s;
 }
 .scroll-track {
   display: block; width: 1px; height: 56px;
@@ -437,8 +438,18 @@ img { display: block; max-width: 100%; }
 .about::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 50% at 75% 50%, rgba(181,48,42,0.04) 0%, transparent 65%);
+  background: radial-gradient(ellipse 70% 50% at 75% 50%, rgba(181,48,42,0.06) 0%, transparent 65%);
   pointer-events: none;
+}
+.about::after {
+  content: '';
+  position: absolute;
+  top: 50%; right: -120px; transform: translateY(-50%);
+  width: 340px; height: 340px;
+  border-radius: 50%;
+  border: 1px solid rgba(181,48,42,0.06);
+  pointer-events: none;
+  box-shadow: 0 0 80px rgba(181,48,42,0.04) inset;
 }
 
 .about-editorial {
@@ -485,7 +496,7 @@ img { display: block; max-width: 100%; }
   font-size: 1.15rem;
   font-weight: 300;
   line-height: 1.75;
-  color: #484848;
+  color: #5a5a5a;
   letter-spacing: 0.01em;
   font-style: italic;
 }
@@ -635,7 +646,7 @@ img { display: block; max-width: 100%; }
 }
 .product-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(181,48,42,0.06);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(181,48,42,0.1), 0 0 40px rgba(181,48,42,0.04);
   z-index: 2;
 }
 .product-card:hover::after { opacity: 1; }

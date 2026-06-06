@@ -60,9 +60,15 @@
       display:inline-flex; align-items:center; gap:10px;
       padding:0 36px;
       font-size:.6rem; letter-spacing:.22em; text-transform:uppercase;
-      color:#686868; font-weight:400; white-space:nowrap;
+      color:#7a7a7a; font-weight:400; white-space:nowrap;
     }
     .ticker-item b { color:var(--accent); font-weight:500; }
+    .ticker-item::after {
+      content: '·';
+      color: rgba(181,48,42,0.4);
+      font-size: .8rem;
+      margin-left: 10px;
+    }
 
     /* ── TABS ── */
     .mix-tabs {
@@ -103,7 +109,9 @@
     }
     .page-hero::before {
       content:''; position:absolute; inset:0;
-      background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(181,48,42,.09) 0%, transparent 65%);
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(181,48,42,.13) 0%, transparent 55%),
+        radial-gradient(ellipse 100% 80% at 50% -10%, rgba(100,40,180,.06) 0%, transparent 60%);
       pointer-events:none;
     }
     .page-hero .label {
@@ -188,8 +196,9 @@
     }
 
     .pick-card {
-      background:var(--bg3); border:1px solid var(--border);
-      border-radius:12px; padding:32px 24px 28px;
+      background:linear-gradient(160deg, #131313 0%, #0f0f0f 100%);
+      border:1px solid var(--border);
+      border-radius:14px; padding:32px 24px 28px;
       display:flex; flex-direction:column; align-items:center;
       gap:0; cursor:default; position:relative; overflow:hidden;
     }
@@ -242,12 +251,16 @@
     }
     .pick-card.in-view { opacity:1; transform:translateY(0); }
     .pick-card.in-view:hover {
-      border-color:rgba(255,255,255,.08);
-      transform:translateY(-4px);
-      box-shadow:0 16px 48px rgba(0,0,0,.4);
+      border-color:rgba(255,255,255,.1);
+      transform:translateY(-5px);
+      box-shadow:0 20px 56px rgba(0,0,0,.5), 0 0 40px rgba(var(--pick-color-rgb, 181,48,42),.08);
     }
 
     /* ── MAIN LAYOUT ── */
+    #creator {
+      border-top: 1px solid rgba(255,255,255,0.04);
+      background: radial-gradient(ellipse 100% 40% at 50% 0%, rgba(181,48,42,0.03) 0%, transparent 60%);
+    }
     .mix-layout {
       display:grid; grid-template-columns:380px 1fr;
       gap:0; max-width:1200px; margin:0 auto;
@@ -259,6 +272,7 @@
       position:sticky; top:68px;
       padding:48px 40px 40px;
       border-right:1px solid var(--border);
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(181,48,42,0.04) 0%, transparent 65%);
     }
     .canvas-wrap {
       position:relative; width:280px; height:280px;
@@ -435,6 +449,10 @@
       max-width:1200px; margin:0 auto;
       padding:0 40px 80px;
       border-top:1px solid var(--border);
+      display: none;
+    }
+    .submit-section.ready {
+      display: block;
     }
     .submit-inner {
       max-width:640px; margin:0 auto;
@@ -1107,6 +1125,7 @@ function updateAll() {
   // Submit section
   const si = document.getElementById('submitInner');
   si.classList.toggle('visible', total === 100);
+  document.querySelector('.submit-section').classList.toggle('ready', total === 100);
 
   if (total === 100) {
     // Build summary chips
@@ -1293,7 +1312,7 @@ function getFlavor(id) { return FLAVORS.find(f => f.id === id); }
 function drawPickDonut(canvas, recipe, progress) {
   const p    = progress === undefined ? 1 : progress;
   const dpr2 = Math.min(window.devicePixelRatio || 1, 2);
-  const SIZE = 140;
+  const SIZE = 158;
   if (canvas.width !== SIZE * dpr2) {
     canvas.width  = SIZE * dpr2;
     canvas.height = SIZE * dpr2;
