@@ -679,13 +679,11 @@ img { display: block; max-width: 100%; }
   transition: opacity 0.4s ease;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border-soft);
-  margin-bottom: 1px;
+  gap: 14px;
 }
 
 .product-card {
-  border: 1px solid var(--glass-border);
+  border: none;
   overflow: hidden;
   background: rgba(12,10,10,0.7);
   backdrop-filter: var(--glass-blur-sm);
@@ -865,11 +863,11 @@ img { display: block; max-width: 100%; }
   max-width: 320px;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 12px 56px rgba(181,48,42,0.1));
+  filter: drop-shadow(0 12px 56px rgba(181,48,42,0.15));
   transition: filter 1.2s ease;
 }
 .format-50g-screen.visible .f50-image img {
-  filter: drop-shadow(0 12px 72px rgba(181,48,42,0.2));
+  filter: drop-shadow(0 12px 72px rgba(181,48,42,0.28));
 }
 
 .f50-text {
