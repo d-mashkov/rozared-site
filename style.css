@@ -1,3 +1,98 @@
+/* ─── PRELOADER ─── */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), visibility 0.8s;
+}
+#preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.preloader-rose {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+.preloader-rose svg { width: 100%; height: 100%; overflow: visible; }
+.rose-path {
+  fill: none;
+  stroke: #c03028;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--len, 400);
+  stroke-dashoffset: var(--len, 400);
+  animation: rz-drawLine var(--dur,1.2s) var(--delay,0s) cubic-bezier(0.4,0,0.2,1) forwards;
+}
+.rose-path.leaf        { stroke: rgba(192,48,40,0.55); stroke-width: 0.9; }
+.rose-path.petal-inner { stroke: rgba(220,80,70,0.9);  stroke-width: 1;   }
+.rose-path.accent      { stroke: rgba(255,255,255,0.15); stroke-width: 0.6; }
+@keyframes rz-drawLine { to { stroke-dashoffset: 0; } }
+.rose-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 48%, rgba(192,48,40,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  animation: rz-glowIn 0.8s 2.8s ease forwards;
+}
+@keyframes rz-glowIn { to { opacity: 1; } }
+.preloader-brand {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: rz-fadeUp 0.7s 2.6s cubic-bezier(0.2,0,0,1) forwards;
+}
+.preloader-logo {
+  width: 180px;
+  height: auto;
+  filter: brightness(1.05);
+}
+.preloader-tagline {
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  font-family: var(--font);
+  font-weight: 400;
+}
+.preloader-progress {
+  margin-top: 28px;
+  width: 120px;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: rz-fadeIn 0.3s 0.2s ease forwards;
+}
+.preloader-progress::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; height: 100%; width: 0%;
+  background: linear-gradient(90deg, transparent, #c03028, transparent);
+  animation: rz-progressFill 2.4s 0.1s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes rz-progressFill {
+  0%   { width:   0%; opacity: 1; }
+  85%  { width: 100%; opacity: 1; }
+  100% { width: 100%; opacity: 0; }
+}
+@keyframes rz-fadeIn { to { opacity: 1; } }
+@keyframes rz-fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ─── RESET & BASE ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
