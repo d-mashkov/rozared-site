@@ -7,16 +7,26 @@ let currentLang = 'en';
 function setLanguage(lang) {
   currentLang = lang;
   document.querySelectorAll('[data-en]').forEach(function(el) {
-    el.textContent = el.getAttribute('data-' + lang);
+    // innerHTML — сохраняем &nbsp;, <strong> и прочую разметку внутри переводов
+    el.innerHTML = el.getAttribute('data-' + lang);
   });
   document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  try { localStorage.setItem('rozared-lang', lang); } catch (e) {}
 }
 document.querySelectorAll('.lang-btn').forEach(function(b) {
   b.addEventListener('click', function() { setLanguage(b.dataset.lang); });
 });
+
+/* Восстанавливаем выбранный язык; для новых посетителей — по языку браузера */
+(function() {
+  var saved = null;
+  try { saved = localStorage.getItem('rozared-lang'); } catch (e) {}
+  var lang = saved || (navigator.language && navigator.language.indexOf('zh') === 0 ? 'zh' : 'en');
+  if (lang !== 'en') setLanguage(lang);
+})();
 
 /* ─── HEADER ─── */
 var header = document.getElementById('header');
@@ -108,7 +118,6 @@ document.querySelectorAll('.about-text > *').forEach(function(el, i) {
 document.querySelectorAll('.stat-card').forEach(function(el, i) {
   addReveal(el, 'reveal', i + 1);
 });
-addReveal(document.querySelector('.about-brand-text'), 'reveal-right', 2);
 
 ['.catalog .section-label', '.catalog h2', '.catalog-intro', '.format-switcher'].forEach(function(sel, i) {
   addReveal(document.querySelector(sel), 'reveal', i + 1);
@@ -198,10 +207,6 @@ var form    = document.getElementById('contactForm');
 var success = document.getElementById('formSuccess');
 
 if (form && success) {
-  // Подставляем текущий URL как _next (возврат на ту же страницу)
-  var nextField = document.getElementById('formNextUrl');
-  if (nextField) nextField.value = window.location.href;
-
   form.addEventListener('submit', function(e) {
     e.preventDefault();
 

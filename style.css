@@ -407,18 +407,6 @@ img { display: block; max-width: 100%; }
   pointer-events: none;
 }
 
-/* Занавес */
-.hero-veil {
-  position: fixed; inset: 0; z-index: 200;
-  background: #060606;
-  transform-origin: top;
-  animation: veilLift 1.2s cubic-bezier(0.76, 0, 0.24, 1) 0.2s forwards;
-}
-@keyframes veilLift {
-  0%   { transform: scaleY(1); }
-  100% { transform: scaleY(0); }
-}
-
 /* Фон (поверх видео — только glow, без глухого тёмного слоя) */
 .hero-bg {
   position: absolute; inset: 0;
@@ -800,6 +788,16 @@ img { display: block; max-width: 100%; }
   border-radius: var(--radius);
   transition: opacity 0.5s ease;
 }
+/* Liquid glass: подвижный specular-блик по верхней кромке */
+.product-card::before {
+  content: '';
+  position: absolute; top: 0; left: -60%;
+  width: 60%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  pointer-events: none; z-index: 2;
+  transition: left 0.7s cubic-bezier(0.25,0.1,0.25,1);
+}
+.product-card:hover::before { left: 100%; }
 .product-card:hover {
   transform: translateY(-8px);
   border-color: rgba(255,255,255,0.13);
@@ -1166,7 +1164,6 @@ img { display: block; max-width: 100%; }
 .footer-logo:hover .logo-img { opacity: 0.8; }
 .footer-copy { font-size: 0.68rem; color: #282828; letter-spacing: 0.06em; font-weight: 300; }
 
-/* ─── RESPONSIVE ─── */
 /* ─── RESPONSIVE ─── */
 
 @media (max-width: 1024px) {

@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Create Your Mix — RozaRed</title>
+  <title>Create Your Mix — RozaRed Challenge | 创建你的配方</title>
+  <meta name="description" content="Craft your own 100% original RozaRed blend from 10 signature flavors. The most creative mixes win merch and get featured. 从10种风味中调配你的原创配方。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Create Your Mix — RozaRed Challenge" />
+  <meta property="og:description" content="Craft your own blend from 10 signature flavors and join the challenge." />
+  <meta property="og:image" content="https://d-mashkov.github.io/rozared-site/images/hero-poster.jpg" />
+  <meta property="og:url" content="https://d-mashkov.github.io/rozared-site/mix.html" />
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,900&display=swap" rel="stylesheet">
@@ -19,10 +26,15 @@
       --border: #1e1e1e;
       --text:   #c0c0c0;
       --muted:  #555;
-      --accent: #b5302a;
+      --accent: #c03028;
       --white:  #f0ede8;
       --font:   'DM Sans', sans-serif;
-      --r:      8px;
+      --r:      12px;
+      --glass-bg:      rgba(255,255,255,0.04);
+      --glass-border:  rgba(255,255,255,0.08);
+      --glass-inset:   rgba(255,255,255,0.05);
+      --glass-blur:    blur(18px) saturate(180%);
+      --glass-blur-sm: blur(10px) saturate(160%);
       --ease:   0.3s cubic-bezier(0.25,0.1,0.25,1);
     }
 
@@ -65,7 +77,7 @@
     .ticker-item b { color:var(--accent); font-weight:500; }
     .ticker-item::after {
       content: '·';
-      color: rgba(181,48,42,0.4);
+      color: rgba(192,48,40,0.4);
       font-size: .8rem;
       margin-left: 10px;
     }
@@ -74,7 +86,10 @@
     .mix-tabs {
       display:flex; justify-content:center; gap:8px;
       padding:16px 24px;
-      background:var(--bg);
+      background:rgba(8,6,6,0.72);
+      backdrop-filter:blur(28px) saturate(200%);
+      -webkit-backdrop-filter:blur(28px) saturate(200%);
+      border-bottom:1px solid rgba(255,255,255,0.05);
       position:sticky; top:68px; z-index:40;
     }
     .mix-tab {
@@ -110,8 +125,7 @@
     .page-hero::before {
       content:''; position:absolute; inset:0;
       background:
-        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(181,48,42,.13) 0%, transparent 55%),
-        radial-gradient(ellipse 100% 80% at 50% -10%, rgba(100,40,180,.06) 0%, transparent 60%);
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(192,48,40,.13) 0%, transparent 55%);
       pointer-events:none;
     }
     .page-hero .label {
@@ -127,23 +141,19 @@
       line-height: 1.0;
       margin-bottom: 24px;
 
-      /* Барочная палитра Эрмитажа: золото → алый → фиолет → кобальт */
+      /* Монохром бренда: белый → красный, в духе главной страницы */
       background: linear-gradient(
         118deg,
-        #f0c840 0%,
-        #e86030 22%,
-        #c82858 48%,
-        #7830b8 72%,
-        #3858e0 100%
+        #f2ede8 0%,
+        #e8d8d4 40%,
+        #e04438 75%,
+        #c03028 100%
       );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
 
-      /* Свечение под текстом */
-      filter:
-        drop-shadow(0 0 48px rgba(200, 60, 80, .28))
-        drop-shadow(0 4px 24px rgba(100, 40, 180, .22));
+      filter: drop-shadow(0 0 48px rgba(192, 48, 40, .25));
     }
     .page-hero .sub {
       font-size:.9rem; color:#666; max-width:500px;
@@ -151,16 +161,16 @@
     }
     .prize-badge {
       display:inline-flex; align-items:center; gap:12px;
-      background:rgba(181,48,42,.08); border:1px solid rgba(181,48,42,.28);
+      background:rgba(192,48,40,.08); border:1px solid rgba(192,48,40,.28);
       padding:12px 28px; border-radius:50px; margin-bottom:36px;
       font-size:.72rem; letter-spacing:.1em; color:#c57a5a;
-      box-shadow: 0 0 32px rgba(181,48,42,.12), 0 0 80px rgba(181,48,42,.06);
+      box-shadow: 0 0 32px rgba(192,48,40,.12), 0 0 80px rgba(192,48,40,.06);
       animation: badgePulse 3.5s ease-in-out infinite;
     }
     .prize-badge .icon { font-size:1.1rem; }
     @keyframes badgePulse {
-      0%,100% { box-shadow: 0 0 24px rgba(181,48,42,.10), 0 0 60px rgba(181,48,42,.04); }
-      50%      { box-shadow: 0 0 40px rgba(181,48,42,.22), 0 0 100px rgba(181,48,42,.10); }
+      0%,100% { box-shadow: 0 0 24px rgba(192,48,40,.10), 0 0 60px rgba(192,48,40,.04); }
+      50%      { box-shadow: 0 0 40px rgba(192,48,40,.22), 0 0 100px rgba(192,48,40,.10); }
     }
 
     /* ── CURATOR PICKS ── */
@@ -171,7 +181,7 @@
     }
     .curator-section::before {
       content:''; position:absolute; inset:0;
-      background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(181,48,42,.04) 0%, transparent 70%);
+      background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(192,48,40,.04) 0%, transparent 70%);
       pointer-events:none;
     }
     .curator-header {
@@ -196,8 +206,11 @@
     }
 
     .pick-card {
-      background:linear-gradient(160deg, #131313 0%, #0f0f0f 100%);
-      border:1px solid var(--border);
+      background:rgba(12,10,10,0.7);
+      backdrop-filter:var(--glass-blur-sm);
+      -webkit-backdrop-filter:var(--glass-blur-sm);
+      border:1px solid var(--glass-border);
+      box-shadow:0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 var(--glass-inset);
       border-radius:14px; padding:32px 24px 28px;
       display:flex; flex-direction:column; align-items:center;
       gap:0; cursor:default; position:relative; overflow:hidden;
@@ -253,13 +266,13 @@
     .pick-card.in-view:hover {
       border-color:rgba(255,255,255,.1);
       transform:translateY(-5px);
-      box-shadow:0 20px 56px rgba(0,0,0,.5), 0 0 40px rgba(var(--pick-color-rgb, 181,48,42),.08);
+      box-shadow:0 20px 56px rgba(0,0,0,.5), 0 0 40px rgba(var(--pick-color-rgb, 192,48,40),.08);
     }
 
     /* ── MAIN LAYOUT ── */
     #creator {
       border-top: 1px solid rgba(255,255,255,0.04);
-      background: radial-gradient(ellipse 100% 40% at 50% 0%, rgba(181,48,42,0.03) 0%, transparent 60%);
+      background: radial-gradient(ellipse 100% 40% at 50% 0%, rgba(192,48,40,0.03) 0%, transparent 60%);
     }
     .mix-layout {
       display:grid; grid-template-columns:380px 1fr;
@@ -272,7 +285,7 @@
       position:sticky; top:68px;
       padding:48px 40px 40px;
       border-right:1px solid var(--border);
-      background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(181,48,42,0.04) 0%, transparent 65%);
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(192,48,40,0.04) 0%, transparent 65%);
     }
     .canvas-wrap {
       position:relative; width:280px; height:280px;
@@ -287,8 +300,8 @@
       animation: pulse 2s ease-in-out infinite;
     }
     @keyframes pulse {
-      0%,100% { filter: drop-shadow(0 0 0px rgba(181,48,42,0)); }
-      50%      { filter: drop-shadow(0 0 28px rgba(181,48,42,0.4)); }
+      0%,100% { filter: drop-shadow(0 0 0px rgba(192,48,40,0)); }
+      50%      { filter: drop-shadow(0 0 28px rgba(192,48,40,0.4)); }
     }
 
     /* Rating */
@@ -375,14 +388,18 @@
     .flavor-row {
       display:flex; align-items:center; gap:12px;
       padding:14px 16px;
-      background:var(--bg3); border:1px solid transparent;
+      background:var(--glass-bg); border:1px solid transparent;
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
       border-radius:var(--r);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);
       transition:background .25s, border-color .25s, transform .2s;
       cursor:default;
     }
     .flavor-row.active {
-      background:var(--bg4);
-      border-color:var(--border);
+      background:rgba(255,255,255,0.07);
+      border-color:var(--glass-border);
+      box-shadow:inset 0 1px 0 var(--glass-inset), 0 2px 12px rgba(0,0,0,0.25);
     }
     .flavor-row.active .frow-name { color:var(--white); }
 
@@ -425,7 +442,7 @@
     }
     .frow-input::-webkit-inner-spin-button,
     .frow-input::-webkit-outer-spin-button { -webkit-appearance:none; }
-    .frow-input:focus { border-color:rgba(181,48,42,.5); }
+    .frow-input:focus { border-color:rgba(192,48,40,.5); }
     .frow-pct {
       position:absolute; right:6px; top:50%;
       transform:translateY(-50%);
@@ -476,7 +493,10 @@
     }
 
     .mix-summary {
-      background:var(--bg3); border:1px solid var(--border);
+      background:var(--glass-bg); border:1px solid var(--glass-border);
+      backdrop-filter:var(--glass-blur-sm);
+      -webkit-backdrop-filter:var(--glass-blur-sm);
+      box-shadow:inset 0 1px 0 var(--glass-inset);
       border-radius:var(--r); padding:20px 24px;
       margin-bottom:32px; display:flex; flex-wrap:wrap; gap:10px;
     }
@@ -491,7 +511,10 @@
     .submit-form { display:flex; flex-direction:column; gap:14px; }
     .sf-group { position:relative; }
     .sf-group input, .sf-group textarea {
-      width:100%; background:var(--bg3); border:1px solid #1a1a1a;
+      width:100%; background:var(--glass-bg); border:1px solid var(--glass-border);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
       border-radius:var(--r); color:var(--white); font-family:var(--font);
       font-size:.88rem; font-weight:300;
       padding:20px 16px 8px; outline:none;
@@ -499,7 +522,7 @@
       resize:none;
     }
     .sf-group input:focus, .sf-group textarea:focus {
-      border-color:rgba(181,48,42,.5);
+      border-color:rgba(192,48,40,.5);
     }
     .sf-group label {
       position:absolute; top:14px; left:16px;
@@ -525,7 +548,7 @@
     }
     .submit-btn:hover {
       background:var(--accent); color:var(--white);
-      box-shadow:0 0 24px rgba(181,48,42,.25);
+      box-shadow:0 0 24px rgba(192,48,40,.25);
     }
     .submit-fine {
       font-size:.65rem; color:var(--muted); text-align:center;
@@ -843,7 +866,7 @@ const RATINGS = [
   { min:2,  max:3,  label:'Focused Blend',  labelZh:'专注调配',   color:'#9B7240' },
   { min:4,  max:5,  label:'Balanced Blend', labelZh:'均衡调配',   color:'#3D8C60' },
   { min:6,  max:8,  label:'Adventurous',    labelZh:'大胆创新',   color:'#F5A42A' },
-  { min:9,  max:10, label:'Masterblend',    labelZh:'大师调配',   color:'#b5302a' },
+  { min:9,  max:10, label:'Masterblend',    labelZh:'大师调配',   color:'#c03028' },
 ];
 
 /* ═══════════════════════════════════════════
@@ -979,7 +1002,7 @@ function drawDonut() {
     ctx.fillText(currentLang === 'zh' ? '填满你的碗' : 'to fill your bowl', CX, CY + 10);
   } else if (total === 100) {
     ctx.font = '600 13px DM Sans';
-    ctx.fillStyle = '#b5302a';
+    ctx.fillStyle = '#c03028';
     ctx.fillText(currentLang === 'zh' ? '完成' : 'READY', CX, CY - 10);
     ctx.font = '300 10px DM Sans';
     ctx.fillStyle = '#555';
@@ -997,7 +1020,7 @@ function drawDonut() {
   if (total === 100) {
     ctx.beginPath();
     ctx.arc(CX, CY, OR + 4, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(181,48,42,0.15)';
+    ctx.strokeStyle = 'rgba(192,48,40,0.15)';
     ctx.lineWidth = 2;
     ctx.stroke();
   }
@@ -1603,9 +1626,9 @@ window.addEventListener('scroll', function() {
 function setLanguage(lang) {
   currentLang = lang;
 
-  // Switch all static data-en/data-zh elements
+  // Switch all static data-en/data-zh elements (innerHTML — сохраняем разметку в переводах)
   document.querySelectorAll('[data-en]').forEach(el => {
-    el.textContent = el.getAttribute('data-' + lang);
+    el.innerHTML = el.getAttribute('data-' + lang);
   });
 
   // Active button state
@@ -1613,6 +1636,7 @@ function setLanguage(lang) {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  try { localStorage.setItem('rozared-lang', lang); } catch (e) {}
 
   // Rebuild ticker in new lang
   buildTicker();
@@ -1665,6 +1689,13 @@ if (burgerEl && mobileNavEl) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
+// Восстанавливаем язык (сохранённый или по языку браузера)
+(function() {
+  var saved = null;
+  try { saved = localStorage.getItem('rozared-lang'); } catch (e) {}
+  var lang = saved || (navigator.language && navigator.language.indexOf('zh') === 0 ? 'zh' : 'en');
+  if (lang !== 'en') setLanguage(lang);
+})();
 updateAll();
 drawDonut();
 </script>
