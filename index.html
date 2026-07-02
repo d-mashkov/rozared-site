@@ -237,8 +237,8 @@
       <div class="format-switcher">
         <button class="format-tab active" data-format="250g">250g</button>
         <button class="format-tab" data-format="50g">50g</button>
-        <a href="mix.html" target="_blank" class="format-tab format-tab--mixes"
-           data-en="Mixes" data-zh="配方">Mixes</a>
+        <button class="format-tab format-tab--mixes" data-format="mixes"
+                data-en="Mixes" data-zh="配方">Mixes</button>
       </div>
 
       <!-- 50g coming soon -->
@@ -252,6 +252,26 @@
              data-zh="我们正在不断完善产品及其包装格式，很快将为您推出更便捷的规格。">
             We are working on perfecting our product and its format. We will present you with a convenient format very soon.
           </p>
+        </div>
+      </div>
+
+      <!-- Mixes screen -->
+      <div class="mixes-screen" id="mixesScreen">
+        <div class="mixes-header">
+          <span class="mixes-label" data-en="Signature Mixes" data-zh="招牌配方">Signature Mixes</span>
+          <p data-en="Ready-made blend recipes from our lab — proportions included. Mix RozaRed flavors and discover new dimensions."
+             data-zh="来自我们实验室的现成混合配方——附带比例。混合 RozaRed 风味，发现全新境界。">
+            Ready-made blend recipes from our lab — proportions included. Mix RozaRed flavors and discover new dimensions.
+          </p>
+        </div>
+        <div class="mixes-grid">
+          <div class="mix-poster"><img src="images/mixes/conifer-candies.jpg" alt="Conifer Candies — Lemon Lime 70% + Coniferous Forest 30%" loading="lazy" /></div>
+          <div class="mix-poster"><img src="images/mixes/jasmine-milk-tea.jpg" alt="Jasmine Milk Tea — TieGuanYin 60% + Jasmine 30% + Milk 10%" loading="lazy" /></div>
+          <div class="mix-poster"><img src="images/mixes/jasmine-tea-with-lychee-and-watermelon.jpg" alt="Jasmine Tea with Lychee and Watermelon — Watermelon 40% + Lychee 40% + Jasmine 20%" loading="lazy" /></div>
+          <div class="mix-poster"><img src="images/mixes/mango-and-lychee-smoothie.jpg" alt="Mango and Lychee Smoothie — Lychee 50% + Mango 25% + Milk 25%" loading="lazy" /></div>
+          <div class="mix-poster"><img src="images/mixes/mango-lychee.jpg" alt="Mango Lychee — Mango 50% + Lychee 50%" loading="lazy" /></div>
+          <div class="mix-poster"><img src="images/mixes/mint-tea-with-pine-needles.jpg" alt="Mint Tea with Pine Needles" loading="lazy" /></div>
+          <div class="mix-poster"><img src="images/mixes/watermelon-gum.jpg" alt="Watermelon Gum" loading="lazy" /></div>
         </div>
       </div>
 
@@ -416,14 +436,14 @@
             Perfect for exploring the flavor collection and discovering new combinations.
           </p>
         </div>
-        <a href="mix.html" target="_blank" class="format-card format-card--mixes">
+        <button type="button" class="format-card format-card--mixes" id="mixesFormatCard">
           <span class="format-size format-size--mixes" data-en="Mixes" data-zh="配方">Mixes</span>
           <span class="format-divider">—</span>
-          <p data-en="Create your own blend from 10 signature flavors and join the challenge."
-             data-zh="从10种标志性风味中创建你的配方，参加挑战赛。">
-            Create your own blend from 10 signature flavors and join the challenge.
+          <p data-en="Ready-made blend recipes — mix our flavors and discover new dimensions."
+             data-zh="现成混合配方——混合我们的风味，发现全新境界。">
+            Ready-made blend recipes — mix our flavors and discover new dimensions.
           </p>
-        </a>
+        </button>
       </div>
 
     </div>

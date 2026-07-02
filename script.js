@@ -160,47 +160,64 @@ var co = new IntersectionObserver(function(entries) {
 }, { threshold: 0.5 });
 document.querySelectorAll('.stat-num[data-target]').forEach(function(el) { co.observe(el); });
 
-/* ─── FORMAT SWITCHER ─── */
-document.querySelectorAll('.format-tab').forEach(function(tab) {
-  tab.addEventListener('click', function() {
-    var grid    = document.getElementById('catalogGrid');
-    var s50     = document.getElementById('format50gScreen');
-    var formats = document.querySelector('.catalog-formats');
+/* ─── FORMAT SWITCHER (250g / 50g / mixes) ─── */
+function switchFormat(format) {
+  var grid    = document.getElementById('catalogGrid');
+  var s50     = document.getElementById('format50gScreen');
+  var mixes   = document.getElementById('mixesScreen');
+  var formats = document.querySelector('.catalog-formats');
 
-    document.querySelectorAll('.format-tab').forEach(function(t) {
-      t.classList.remove('active');
-    });
-    tab.classList.add('active');
-
-    if (tab.dataset.format === '50g') {
-      if (grid)    { grid.style.transition = 'opacity 0.4s ease'; grid.style.opacity = '0'; }
-      if (formats) { formats.style.transition = 'opacity 0.4s ease'; formats.style.opacity = '0'; }
-      setTimeout(function() {
-        if (grid)    grid.style.display = 'none';
-        if (formats) formats.style.display = 'none';
-        if (s50) {
-          s50.style.display = 'flex';
-          setTimeout(function() { s50.classList.add('visible'); }, 30);
-        }
-      }, 420);
-    } else {
-      if (s50) { s50.classList.remove('visible'); }
-      setTimeout(function() {
-        if (s50)  s50.style.display = 'none';
-        if (grid) {
-          grid.style.display = '';
-          grid.style.transition = 'opacity 0.5s ease';
-          grid.style.opacity = '0';
-          setTimeout(function() { grid.style.opacity = '1'; }, 30);
-        }
-        if (formats) {
-          formats.style.display = '';
-          formats.style.opacity = '1';
-        }
-      }, 450);
-    }
+  document.querySelectorAll('.format-tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.format === format);
   });
+
+  // Скрываем всё
+  var toHide = [grid, formats, s50, mixes].filter(Boolean);
+  toHide.forEach(function(el) {
+    el.style.transition = 'opacity 0.4s ease';
+    el.style.opacity = '0';
+  });
+  if (s50) s50.classList.remove('visible');
+
+  setTimeout(function() {
+    if (grid)    grid.style.display = 'none';
+    if (formats) formats.style.display = 'none';
+    if (s50)     s50.style.display = 'none';
+    if (mixes)   mixes.style.display = 'none';
+
+    if (format === '50g' && s50) {
+      s50.style.display = 'flex';
+      s50.style.opacity = '';
+      setTimeout(function() { s50.classList.add('visible'); }, 30);
+    } else if (format === 'mixes' && mixes) {
+      mixes.style.display = 'block';
+      setTimeout(function() { mixes.style.opacity = '1'; }, 30);
+    } else {
+      if (grid) {
+        grid.style.display = '';
+        setTimeout(function() { grid.style.opacity = '1'; }, 30);
+      }
+      if (formats) {
+        formats.style.display = '';
+        setTimeout(function() { formats.style.opacity = '1'; }, 30);
+      }
+    }
+  }, 420);
+}
+
+document.querySelectorAll('.format-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() { switchFormat(tab.dataset.format); });
 });
+
+// Карточка Mixes внизу каталога → переключаем вкладку и скроллим к ней
+var mixesCard = document.getElementById('mixesFormatCard');
+if (mixesCard) {
+  mixesCard.addEventListener('click', function() {
+    switchFormat('mixes');
+    var switcher = document.querySelector('.format-switcher');
+    if (switcher) window.scrollTo({ top: switcher.offsetTop - 90, behavior: 'smooth' });
+  });
+}
 
 /* ─── FORM ─── */
 var form    = document.getElementById('contactForm');
