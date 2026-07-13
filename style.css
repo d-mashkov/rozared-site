@@ -161,6 +161,10 @@ a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 img { display: block; max-width: 100%; }
 
+/* Типографика переносов: заголовки — ровные строки, абзацы — без «висячих» слов */
+h1, h2, h3, h4 { text-wrap: balance; }
+p, li, blockquote { text-wrap: pretty; }
+
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
@@ -221,7 +225,7 @@ img { display: block; max-width: 100%; }
   border: 1px solid var(--accent);
   border-radius: var(--radius);
   white-space: nowrap;
-  transition: background var(--ease), color var(--ease), box-shadow var(--ease);
+  transition: background var(--ease), color var(--ease), box-shadow var(--ease), scale 0.15s ease-out;
 }
 .btn-contact-header:hover {
   background: var(--accent);
@@ -237,6 +241,14 @@ img { display: block; max-width: 100%; }
   color: var(--muted); padding: 4px 2px;
   transition: color var(--ease); font-family: var(--font);
   font-weight: 400;
+  position: relative;
+}
+/* Расширенная зона нажатия без изменения раскладки */
+.lang-btn::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px; height: 40px;
 }
 .lang-btn.active { color: var(--accent); }
 .lang-btn:hover  { color: var(--white); }
@@ -312,7 +324,8 @@ img { display: block; max-width: 100%; }
   backdrop-filter: var(--glass-blur-sm);
   -webkit-backdrop-filter: var(--glass-blur-sm);
   box-shadow: 0 2px 16px rgba(217,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.05);
-  transition: background var(--ease), color var(--ease), box-shadow var(--ease), border-color var(--ease);
+  transition: background var(--ease), color var(--ease), box-shadow var(--ease), border-color var(--ease),
+              scale 0.15s ease-out;
   font-family: var(--font); font-weight: 400;
 }
 .btn:hover {
@@ -331,7 +344,8 @@ img { display: block; max-width: 100%; }
   backdrop-filter: var(--glass-blur-sm);
   -webkit-backdrop-filter: var(--glass-blur-sm);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
-  transition: border-color var(--ease), color var(--ease), background var(--ease), box-shadow var(--ease);
+  transition: border-color var(--ease), color var(--ease), background var(--ease), box-shadow var(--ease),
+              scale 0.15s ease-out;
   font-weight: 400;
 }
 .btn-ghost:hover {
@@ -346,9 +360,13 @@ img { display: block; max-width: 100%; }
   border: 1px solid var(--border); color: var(--muted2);
   font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
   border-radius: var(--radius-sm);
-  transition: border-color var(--ease), color var(--ease);
+  transition: border-color var(--ease), color var(--ease), scale 0.15s ease-out;
 }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Тактильный отклик при нажатии */
+.btn:active, .btn-ghost:active, .btn-outline:active,
+.btn-contact-header:active, .btn-mixology-header:active { scale: 0.96; }
 
 /* ─── SECTION BASE ─── */
 .section { padding: 120px 0; }
@@ -532,32 +550,27 @@ img { display: block; max-width: 100%; }
 }
 
 /* ─── SCROLL REVEAL ─── */
-.reveal {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity 1.3s cubic-bezier(0.25,0.1,0.25,1),
-              transform 1.3s cubic-bezier(0.25,0.1,0.25,1);
+/* Однократный вход через keyframes + fill backwards: не занимает transition,
+   поэтому hover-переходы карточек и кнопок работают независимо */
+.reveal, .reveal-left, .reveal-right { opacity: 0; }
+.reveal.visible, .reveal-left.visible, .reveal-right.visible {
+  opacity: 1;
+  animation-duration: 1.3s;
+  animation-timing-function: cubic-bezier(0.25,0.1,0.25,1);
+  animation-fill-mode: backwards;
 }
-.reveal.visible { opacity: 1; transform: none; }
+.reveal.visible       { animation-name: rz-revealUp; }
+.reveal-left.visible  { animation-name: rz-revealLeft; }
+.reveal-right.visible { animation-name: rz-revealRight; }
+@keyframes rz-revealUp    { from { opacity: 0; transform: translateY(24px); } }
+@keyframes rz-revealLeft  { from { opacity: 0; transform: translateX(-28px); } }
+@keyframes rz-revealRight { from { opacity: 0; transform: translateX(28px); } }
 
-.reveal-left {
-  opacity: 0; transform: translateX(-28px);
-  transition: opacity 1.3s cubic-bezier(0.25,0.1,0.25,1),
-              transform 1.3s cubic-bezier(0.25,0.1,0.25,1);
-}
-.reveal-left.visible { opacity: 1; transform: none; }
-
-.reveal-right {
-  opacity: 0; transform: translateX(28px);
-  transition: opacity 1.3s cubic-bezier(0.25,0.1,0.25,1),
-              transform 1.3s cubic-bezier(0.25,0.1,0.25,1);
-}
-.reveal-right.visible { opacity: 1; transform: none; }
-
-.reveal-d1 { transition-delay: 0.10s; }
-.reveal-d2 { transition-delay: 0.22s; }
-.reveal-d3 { transition-delay: 0.34s; }
-.reveal-d4 { transition-delay: 0.46s; }
-.reveal-d5 { transition-delay: 0.58s; }
+.reveal-d1.visible { animation-delay: 0.10s; }
+.reveal-d2.visible { animation-delay: 0.22s; }
+.reveal-d3.visible { animation-delay: 0.34s; }
+.reveal-d4.visible { animation-delay: 0.46s; }
+.reveal-d5.visible { animation-delay: 0.58s; }
 
 /* ─── ABOUT ─── */
 .about {
@@ -820,6 +833,8 @@ img { display: block; max-width: 100%; }
 .product-img img {
   width: 100%; height: 100%;
   object-fit: cover;
+  outline: 1px solid rgba(255,255,255,0.1);
+  outline-offset: -1px;
   transition: transform 0.8s cubic-bezier(0.25,0.1,0.25,1);
 }
 .product-card:hover .product-img img { transform: scale(1.06); }
@@ -918,7 +933,7 @@ img { display: block; max-width: 100%; }
   border-radius: var(--radius);
   white-space: nowrap;
   text-decoration: none;
-  transition: background var(--ease), color var(--ease), border-color var(--ease);
+  transition: background var(--ease), color var(--ease), border-color var(--ease), scale 0.15s ease-out;
 }
 .btn-mixology-header:hover {
   color: var(--white);
@@ -1108,7 +1123,8 @@ button.format-card {
 
 .form-group label {
   position: absolute; top: 14px; left: 16px; font-size: 0.8rem;
-  color: #383838; pointer-events: none; transition: all var(--ease);
+  color: #383838; pointer-events: none;
+  transition: top var(--ease), font-size var(--ease), color var(--ease), letter-spacing var(--ease);
   font-weight: 300; letter-spacing: 0.02em;
 }
 .form-group input:focus ~ label,
@@ -1330,9 +1346,10 @@ button.format-card {
   .container { padding: 0 18px; }
   .section { padding: 72px 0; }
 
-  /* Шапка — скрыть кнопки, оставить бургер + лого + язык */
-  .btn-contact-header { display: none; }
-  .btn-mixology-header { display: none; }
+  /* Шапка — скрыть кнопки, оставить бургер + лого + язык
+     (только в шапке: кнопка Contact Us в мобильном меню остаётся) */
+  .header-actions .btn-contact-header { display: none; }
+  .header-actions .btn-mixology-header { display: none; }
   .header-actions { gap: 0; }
   .header-inner { gap: 12px; }
 
