@@ -163,7 +163,6 @@ document.querySelectorAll('.stat-num[data-target]').forEach(function(el) { co.ob
 /* ─── FORMAT SWITCHER (250g / 50g / mixes) ─── */
 function switchFormat(format) {
   var grid    = document.getElementById('catalogGrid');
-  var s50     = document.getElementById('format50gScreen');
   var mixes   = document.getElementById('mixesScreen');
   var formats = document.querySelector('.catalog-formats');
 
@@ -172,28 +171,27 @@ function switchFormat(format) {
   });
 
   // Скрываем всё
-  var toHide = [grid, formats, s50, mixes].filter(Boolean);
+  var toHide = [grid, formats, mixes].filter(Boolean);
   toHide.forEach(function(el) {
     el.style.transition = 'opacity 0.4s ease';
     el.style.opacity = '0';
   });
-  if (s50) s50.classList.remove('visible');
 
   setTimeout(function() {
     if (grid)    grid.style.display = 'none';
     if (formats) formats.style.display = 'none';
-    if (s50)     s50.style.display = 'none';
     if (mixes)   mixes.style.display = 'none';
 
-    if (format === '50g' && s50) {
-      s50.style.display = 'flex';
-      s50.style.opacity = '';
-      setTimeout(function() { s50.classList.add('visible'); }, 30);
-    } else if (format === 'mixes' && mixes) {
+    if (format === 'mixes' && mixes) {
       mixes.style.display = 'block';
       setTimeout(function() { mixes.style.opacity = '1'; }, 30);
     } else {
+      // 250g / 50g: один и тот же каталог, меняем изображения
       if (grid) {
+        grid.querySelectorAll('img[data-img250]').forEach(function(img) {
+          var src = format === '50g' ? img.dataset.img50 : img.dataset.img250;
+          if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
+        });
         grid.style.display = '';
         setTimeout(function() { grid.style.opacity = '1'; }, 30);
       }

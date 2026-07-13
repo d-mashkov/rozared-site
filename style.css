@@ -826,7 +826,7 @@ p, li, blockquote { text-wrap: pretty; }
 
 .product-img {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1 / 1; /* квадратные рендеры 250g/50g */
   overflow: hidden;
   background: #0d0d0d;
 }
@@ -942,63 +942,6 @@ p, li, blockquote { text-wrap: pretty; }
 .btn-mixology-header.active-page {
   color: var(--accent);
   border-color: rgba(217,0,0,.4);
-}
-
-/* ─── 50g SCREEN ─── */
-.format-50g-screen {
-  display: none;
-  align-items: center;
-  gap: 80px;
-  padding: 56px 0 72px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 1.1s cubic-bezier(0.25,0.1,0.25,1),
-              transform 1.1s cubic-bezier(0.25,0.1,0.25,1);
-}
-.format-50g-screen.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.f50-image {
-  flex: 0 0 360px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.f50-image img {
-  width: 100%;
-  max-width: 320px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 12px 56px rgba(217,0,0,0.15));
-  transition: filter 1.2s ease;
-}
-.format-50g-screen.visible .f50-image img {
-  filter: drop-shadow(0 12px 72px rgba(217,0,0,0.28));
-}
-
-.f50-text {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.f50-label {
-  font-size: 0.58rem;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 400;
-}
-.f50-text p {
-  font-size: 1.05rem;
-  font-weight: 300;
-  color: #505050;
-  line-height: 1.95;
-  letter-spacing: 0.02em;
-  font-style: italic;
-  max-width: 440px;
 }
 
 /* ─── MIXES SCREEN ─── */
@@ -1314,29 +1257,6 @@ button.format-card {
   /* Отменяем центрирование последней — не нужно при чётном числе */
   .product-card--last { grid-column: auto; }
 
-  /* 50g screen — колонка на планшете/мобильном */
-  .format-50g-screen {
-    flex-direction: column !important;
-    align-items: center;
-    gap: 36px;
-    padding: 40px 0 56px;
-  }
-  .f50-image {
-    flex: none;
-    width: 100%;
-    max-width: 280px;
-  }
-  .f50-text {
-    width: 100%;
-    align-items: center;
-    text-align: center;
-    gap: 16px;
-  }
-  .f50-text p {
-    font-size: 0.95rem;
-    max-width: 100%;
-  }
-
   /* Media */
   .media-grid { grid-template-columns: 1fr; gap: 10px; }
 }
@@ -1378,23 +1298,6 @@ button.format-card {
   .catalog-grid { grid-template-columns: 1fr; }
   .mixes-grid   { grid-template-columns: 1fr; }
   .product-card--last { grid-column: auto; }
-  .product-img { aspect-ratio: 16 / 10; }
-
-  /* 50g screen на телефоне */
-  .format-50g-screen {
-    gap: 28px;
-    padding: 32px 0 44px;
-  }
-  .f50-image {
-    max-width: 220px;
-  }
-  .f50-image img {
-    max-width: 200px;
-  }
-  .f50-text p {
-    font-size: 0.88rem;
-    line-height: 1.75;
-  }
 
   /* Format switcher — text-tab style, reduce side padding */
   .format-tab { padding: 0 18px 12px; font-size: 0.68rem; }
