@@ -1,0 +1,29 @@
+name: Deploy to reg.ru hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: FTP deploy to /www/rozared.com
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 31.31.196.254
+          username: u3487296
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: www/rozared.com/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            .claude/**
+            CNAME
+            preloader-preview.html
+            images/original/**
+            images/*.png
