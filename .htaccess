@@ -1,0 +1,7 @@
+RewriteEngine On
+# reg.ru: nginx терминирует SSL перед Apache, поэтому проверяем X-Forwarded-Proto,
+# а не %{HTTPS} (иначе петля редиректа)
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteRule ^(.*)$ https://rozared.com/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^(.*)$ https://rozared.com/$1 [R=301,L]
