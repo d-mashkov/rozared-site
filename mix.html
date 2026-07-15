@@ -826,12 +826,12 @@
     <div class="mix-summary" id="mixSummary"></div>
 
     <form class="submit-form" id="mixForm"
-          action="https://formsubmit.co/ajax/pd@rozared.com" method="POST">
+          action="/send.php" method="POST">
 
       <input type="hidden" name="_subject" value="New RozaRed Mix Submission" />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_captcha" value="false" />
       <input type="hidden" name="mix_recipe" id="hiddenRecipe" />
+      <!-- Honeypot для ботов -->
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
 
       <div class="sf-group">
         <input type="text" name="mix_name" id="mixName" required placeholder=" " />
@@ -1296,7 +1296,7 @@ mixForm.addEventListener('submit', function(e) {
   btn.textContent = currentLang === 'zh' ? '发送中…' : 'Sending…';
   btn.disabled = true; btn.style.opacity = '.6';
 
-  fetch('https://formsubmit.co/ajax/pd@rozared.com', {
+  fetch('/send.php', {
     method:'POST',
     headers:{ 'Accept':'application/json' },
     body: new FormData(mixForm)

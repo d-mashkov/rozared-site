@@ -254,7 +254,7 @@ if (form && success) {
 
     var data = new FormData(form);
 
-    fetch('https://formsubmit.co/ajax/pd@rozared.com', {
+    fetch('/send.php', {
       method: 'POST',
       headers: { 'Accept': 'application/json' },
       body: data
