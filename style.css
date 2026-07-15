@@ -1073,8 +1073,11 @@ button.format-card {
   transform: translate(-50%, -50%) scale(0.8);
 }
 
+/* Бейдж длительности: на широких экранах скрыт — время показывает нативный плеер;
+   на мобильных карточки узкие, плеер время не показывает — бейдж нужен */
 .review-duration {
-  position: absolute; top: 12px; right: 12px;
+  display: none;
+  position: absolute; top: 34px; right: 10px;
   font-size: 0.62rem; letter-spacing: 0.08em;
   color: var(--white);
   font-variant-numeric: tabular-nums;
@@ -1383,6 +1386,8 @@ button.format-card {
   /* Reviews — 2 узкие колонки, вертикальным видео так лучше */
   .reviews-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .review-play { width: 48px; height: 48px; }
+  /* На узких карточках нативный плеер не показывает время — включаем бейдж */
+  .review-duration { display: inline-block; }
   .product-card--last { grid-column: auto; }
 
   /* Format switcher — text-tab style, reduce side padding */
