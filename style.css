@@ -1007,6 +1007,88 @@ button.format-card {
   cursor: pointer;
 }
 
+/* ─── REVIEWS ─── */
+.reviews {
+  background: var(--bg2);
+  position: relative;
+}
+.reviews::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+.reviews-intro {
+  font-size: 0.88rem; color: #484848;
+  margin-bottom: 40px; margin-top: -8px;
+  font-weight: 300; letter-spacing: 0.02em;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.review-card {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #0d0d0d;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 var(--glass-inset);
+}
+
+.review-card video {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  outline: 1px solid rgba(255,255,255,0.1);
+  outline-offset: -1px;
+}
+
+/* Play-оверлей: фирменный красный, гаснет при воспроизведении, клики проходят сквозь */
+.review-play {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: rgba(217,0,0,0.14);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  border: 1px solid rgba(217,0,0,0.45);
+  box-shadow: 0 2px 20px rgba(217,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent-h);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+.review-play svg { margin-left: 3px; } /* оптический центр треугольника */
+.review-card:not(.playing):hover .review-play {
+  background: var(--accent);
+  color: var(--white);
+  box-shadow: 0 4px 28px rgba(217,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+.review-card.playing .review-play {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.review-duration {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 0.62rem; letter-spacing: 0.08em;
+  color: var(--white);
+  font-variant-numeric: tabular-nums;
+  background: rgba(8,6,6,0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.review-card.playing .review-duration { opacity: 0; }
+
 /* ─── CONTACT ─── */
 .contact {
   background: var(--bg);
@@ -1254,6 +1336,7 @@ button.format-card {
   /* Catalog grid — 2 колонки */
   .catalog-grid { grid-template-columns: repeat(2, 1fr); }
   .mixes-grid   { grid-template-columns: repeat(2, 1fr); }
+  .reviews-grid { grid-template-columns: repeat(2, 1fr); }
   /* Отменяем центрирование последней — не нужно при чётном числе */
   .product-card--last { grid-column: auto; }
 
@@ -1297,6 +1380,9 @@ button.format-card {
   /* Catalog — 1 колонка */
   .catalog-grid { grid-template-columns: 1fr; }
   .mixes-grid   { grid-template-columns: 1fr; }
+  /* Reviews — 2 узкие колонки, вертикальным видео так лучше */
+  .reviews-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .review-play { width: 48px; height: 48px; }
   .product-card--last { grid-column: auto; }
 
   /* Format switcher — text-tab style, reduce side padding */

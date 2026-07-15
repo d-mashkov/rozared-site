@@ -134,6 +134,9 @@ document.querySelectorAll('.contact-text > *').forEach(function(el, i) {
 document.querySelectorAll('.media-card').forEach(function(el, i) {
   addReveal(el, 'reveal', i + 1);
 });
+document.querySelectorAll('.review-card').forEach(function(el, i) {
+  addReveal(el, 'reveal', (i % 4) + 1);
+});
 document.querySelectorAll('.form-group, .contact-form .btn').forEach(function(el, i) {
   addReveal(el, 'reveal', i + 1);
 });
@@ -216,6 +219,21 @@ if (mixesCard) {
     if (switcher) window.scrollTo({ top: switcher.offsetTop - 90, behavior: 'smooth' });
   });
 }
+
+/* ─── REVIEWS ─── */
+var reviewVideos = document.querySelectorAll('.review-card video');
+reviewVideos.forEach(function(v) {
+  v.addEventListener('play', function() {
+    v.closest('.review-card').classList.add('playing');
+    // Пауза остальных — одновременно играет только одно видео
+    reviewVideos.forEach(function(other) {
+      if (other !== v) other.pause();
+    });
+  });
+  v.addEventListener('pause', function() {
+    v.closest('.review-card').classList.remove('playing');
+  });
+});
 
 /* ─── FORM ─── */
 var form    = document.getElementById('contactForm');
